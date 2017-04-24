@@ -1,4 +1,4 @@
-# 计算流体力学概述
+# 计算流体力学概述[^1]
 
 ----
 
@@ -108,3 +108,101 @@ $$
 ### 1.3.2 理想流体力学方程组
 
 （1）质量守恒方程
+
+质量守恒定律表述为L单位时间内流体微元中质量的增量，等于同一时间间隔内流入该微元的净质量，即
+$$
+\begin{equation}
+\int _{\Omega } \rho(t_2,\mathbf{X})dx-\int _{\Omega} \rho(t_1,\mathbf{X})dx=
+-\int _{t_1}^{t_2}\int _{\Gamma}\rho \mathbf{u}\cdot \mathbf{n}dSdt       \tag{1.2}
+\end{equation}
+$$
+$\Gamma$为区域$\Omega$的边界。
+
+质量守恒方程的微分形式为
+$$
+\frac{\partial p}{\partial t}+div(\rho \mathbf{u})=0 \tag{1.3}
+$$
+$div$表示散度，$div \mathbf{u}=\frac{\partial u_1}{\partial x_1}+\frac{\partial u_2}{\partial x_2}+ \frac {\partial u_3}{\partial x_3}$。质量守恒方程又称为连续性方程。
+
+（2）动量守恒方程
+
+动量守恒定律表述为：单位时间内流体微元中动量的增量，等于同一时间间隔内流入该微元的动量与外力冲量的和，外力包括作用在边界$\Gamma$上的表面力和作用在区域$\Omega$上的体积力$\mathbf{ F}=(F_1,F_2,F_3)$。
+$$
+\int _{\Omega}\rho \mathbf{u}(t_2,\mathbf{X})dx-\int _{\Omega} \rho \mathbf{u}(t_2,\mathbf{X})dx=
+-\int _{t_1}^{t_2}\int _{\Gamma}\rho(\mathbf{u}\times \mathbf{u})\cdot \mathbf{n}dSdt
+-\int _{t_1}^{t_2}\int _{\Gamma}p\mathbf{n}dSdt
++\int _{t_1}^{t_2}\int _{\Omega}\rho\mathbf{F}dxdt    \tag{1.4}
+$$
+动量守恒方程的微分形式为：
+$$
+\frac{\partial}{\partial t}(\rho \mathbf{u})+div(\rho \mathbf{u\times\mathbf{u}}+p\mathbf{I})=\rho \mathbf{F}    \tag{1.5}
+$$
+写成分量形式，并利用连续性方程化简得：
+$$
+\frac{\partial u_i}{\partial t}+\sum _{k=1}^{3}u_k \frac {\partial u_i}{\partial x_k}+\frac{1}{\rho}\frac{\partial p}{\partial x_i}=F_i,i=1,2,3                 \tag{1.6}
+$$
+或者写成
+$$
+\frac{d\mathbf{u}}{dt}+\frac{1}{\rho}gradp=\mathbf{F}     \tag{1.7}
+$$
+其中，$\frac{d}{dt}=\frac{\partial}{\partial t}+\sum_{k=1}^{3}u_k\frac{\partial}{\partial x_k}$，表示固定流体质点对$t$的导数。
+
+（3）能量守恒方程
+
+能量手很定律描述为：单位时间内流体委员中能量的增量，等于同一时间间隔内流入该微元的能量与外力做功的和。
+$$
+\int _{\Omega}(\rho e+\frac{1}{2}\rho \mathbf{u}^2)(t_2,\mathbf{X})dx-\int _{\Omega}(\rho e+\frac{1}{2} {\rho \mathbf{u}^2})(t_1,\mathbf{X})dx   \\
+=- \int _{t_1}^{t_2}\int _{\Gamma} (\rho e+\frac{1}{2}\rho \mathbf{u}^2)\mathbf{u}\cdot \mathbf{n}dSdt-\int _{t_1}^{t_2}\int _{\Gamma} p\mathbf{u}\cdot\mathbf{n}dSdt+\int _{t_1}^{t_2}\int _{\Omega}\rho\mathbf{F}\cdot \mathbf{u}dxdt             \tag{1.8}
+$$
+
+
+将能量守恒方程化为微分形式
+$$
+\frac{\partial}{\partial t}(\rho e+\frac {1}{2}\rho\mathbf{u}^2)+div(\rho e+\frac{1}{2}\rho \mathbf{u}^2+\rho)\mathbf{u}=\rho \mathbf{F\cdot u}    \tag{1.9}
+$$
+利用连续性方程化简得：
+$$
+\frac{de}{dt}+\frac{p}{\rho^2}\frac{dp}{dt}=0   \tag{1.10}
+$$
+方程（1.1）(1.3)(1.7)(2.0)构成了理想流体力学的基本方程组。
+
+### 1.3.3 粘性流体力学方程组
+
+自然界中并不存在真正的理想流体，对于粘性系数为$\mu$（动力学粘性系数，又称第一粘性系数）的流体，他的基本方程组为：
+
+质量守恒方程（1.3）不变
+$$
+\frac {\partial \rho}{\partial t}+div(\rho \mathbf{u})=0    \tag{1.11}
+$$
+动量守恒方程为
+$$
+\frac {\partial }{\partial t}(\rho \mathbf{u})+div(\rho \mathbf{u}\times\mathbf{u}-\mathbf{P})=\rho\mathbf{F}    \tag{1.12}
+$$
+其中$\mathbf{P}=\{ p_{ij} \}$，
+
+$p_{ij}=-p\delta_{ij}+\mu(\frac{\partial u_i}{\partial x_j}+\frac{\partial u_j}{\partial x_i}-\frac{2}{3}div\mathbf{u}\delta_{ij})+\mu ^{'}div\mathbf{u}\delta_{ij}$，
+
+$\mu^{'}=\lambda+\frac{2}{3}\mu$，称为膨胀粘性系数，又称第二粘性系数。
+
+能量守恒方程为
+$$
+\frac{\partial }{\partial t}((\rho e+\frac{1}{2}\rho \mathbf{u}^2)\mathbf{u}-p\mathbf{u})
+=div(\kappa gradT)+\rho \mathbf{F}\cdot\mathbf{u}                            \tag{1.13}
+$$
+其中$\kappa$为热传导系数。
+
+方程（1.1）（2.1）（2.2）（2.3）构成了粘性流体力学方程组。
+
+对于不可压缩的粘性流体，密度$\rho$为常数，取$\rho=1$，则有
+$$
+div\mathbf{u}=0            \tag{1.14}
+$$
+方程（1.12）变为
+$$
+\frac{\partial u_i}{\partial t}+\sum _{k=1}^{3}u_k\frac{\partial u_i}{\partial x_k}-\mu\Delta u_i+\frac{\partial p}{\partial x_i}=F_i,i=1,2,3                     \tag{1.15}
+$$
+方程（1.14）（1.15）即为三维不可压缩的粘性流体的Navier-Stokes方程，简称N-S方程。
+
+### 参考文献
+
+[^1]: 岳戈. ADINA流体与流固耦合功能的高级应用[M]. 人民交通出版社, 2010.
