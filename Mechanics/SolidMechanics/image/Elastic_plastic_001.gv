@@ -1,0 +1,50 @@
+digraph Elastic_plastic_001
+{
+graph [rankdir=TB,fontsize=10.5,shape="circle",fontname="fangsong",arrowsize=0.1];
+edge [fontname="fangsong",fontsize=12,arrowsize=0.5, color = "darkgreen"];
+node [shape="box",fontname="fagnsong",fontsize=12,style = filled, color = "darkgreen", fillcolor =" skyblue"];
+node1[label="物体"];
+node2[label="变形"];
+node3[label="弹性变形"];
+node4[label="塑性变形"];
+node001[label=弹性力学];
+node5[label="塑性力学"];
+node1->node2[label="载荷"];
+node2->node3[label="载荷移除-完全恢复"];
+node2->node4[label="载荷移除-残留变形"];
+node3->node001[label="单值-线性"];
+node4->node5[label="历史相关-非线性"];
+node6[label="弹塑性力学"];
+node001->node6;
+node5->node6;
+node7[label="基本理论"];
+node8[label="问题求解"];
+node9[label="物质点"];
+node10[label="连续性假设"];
+node11[label="三大基本方程"];
+node6->node7;
+node6->node8;
+node7->node9[label="六面体"];
+node7->node10;
+node7->node11;
+node12[label="平衡方程"];
+node13[label="几何方程"];
+node14[label="本构方程"];
+node11->node12;
+node11->node13;
+node11->node14;
+node15[label="基本假设"];
+node6->node15;
+node15->node10;
+node16[label="均匀性"];
+node17[label="小变形"];
+node18[label="与时间无关"];
+node19[label="弹性本构关系是线性的"];
+node15->node16;
+node15->node17;
+node15->node18;
+node15->node19;
+
+node8->node11[label="给定边界条件-求解"]
+
+}
