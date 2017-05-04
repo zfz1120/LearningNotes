@@ -12,7 +12,7 @@
 | $\sqrt{a+b}$        | \sqrt{a+b}          | $\overline{ab}$      | \overline{ab}            |
 | $ \sqrt[c]{a+b}$    | \sqrt[c]{a+b}       | $\underline{ab}$     | \underline{ab}           |
 | $\overbrace{ab}$    | \overbrace{ab}      | $a'$                 | a'                       |
-| $\underbrace{ab}$   | \underbrace{ab}     | $a\prime$            | A\prime                  |
+| $\underbrace{ab}$   | \underbrace{ab}     | $a\prime$            | a\prime                  |
 | $\cdots$            | \cdots              | $a^{\prime}$         | a^{\prime}               |
 | $\ddots$            | \ddots              | $\ldots$             | \ldots                   |
 | $\vdots$            | \vdots              | $$\lim_{a \to 0}xy$$ | \$\$\lim_{a \to 0}xy\$\$ |
@@ -54,7 +54,7 @@ $$
 
 带{...}的矩阵
 
-``` \left\{ \begin{matrix}   1 &amp; 2 &amp; 3 \\   4 &amp; 5 &amp; 6 \\   7 &amp; 8 &amp; 9  \end{matrix}  \right\} \tag{2}
+``` \left\{ \begin{matrix}   1 &amp;amp; 2 &amp;amp; 3 \\   4 &amp;amp; 5 &amp;amp; 6 \\   7 &amp;amp; 8 &amp;amp; 9  \end{matrix}  \right\} \tag{2}
 $$
  \left\{
  \begin{matrix}
