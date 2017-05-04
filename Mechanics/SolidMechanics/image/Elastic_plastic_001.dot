@@ -1,13 +1,13 @@
 digraph Elastic_plastic_001
 {
-graph [rankdir=TB,fontsize=10.5,shape="circle",fontname="fangsong",arrowsize=0.1];
+graph [rankdir=TB,fontsize=10.5,shape="circle",fontname="fangsong",arrowsize=0.5];
 edge [fontname="fangsong",fontsize=12,arrowsize=0.5, color = "darkgreen"];
-node [shape="box",fontname="fagnsong",fontsize=12,style = filled, color = "darkgreen", fillcolor =" skyblue"];
+node [shape="box",fontname="fangsong",fontsize=12,style = filled, color = "darkgreen", fillcolor =" skyblue"];
 node1[label="物体"];
 node2[label="变形"];
 node3[label="弹性变形"];
 node4[label="塑性变形"];
-node001[label=弹性力学];
+node001[label="弹性力学"];
 node5[label="塑性力学"];
 node1->node2[label="载荷"];
 node2->node3[label="载荷移除-完全恢复"];
