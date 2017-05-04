@@ -44,7 +44,6 @@ node15->node16;
 node15->node17;
 node15->node18;
 node15->node19;
-
 node8->node11[label="给定边界条件-求解"]
 
 }
