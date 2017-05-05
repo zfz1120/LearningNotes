@@ -17,8 +17,34 @@
 | $\ddots$            | \ddots              | $\ldots$             | \ldots                   |
 | $\vdots$            | \vdots              | $$\lim_{a \to 0}xy$$ | \$\$\lim_{a \to 0}xy\$\$ |
 | $$a+b=c \tag{1.1}$$ | a+b=c   \tag{1.1}   | $\lim_{a\to 0}xy$    | \$\lim_{a \to 0}xy\$     |
-| $\sum^{a}_{b}$      | \$\sum^{a}_{b}\$    |                      |                          |
-| $$\sum^{a}_{b}$$    | \$$\sum^{a}_{b}\$\$ |                      |                          |
+| $\sum^{a}_{b}$      | \$\sum^{a}_{b}\$    | $\vec X$             | \vec{X}                  |
+| $$\sum^{a}_{b}$$    | \$$\sum^{a}_{b}\$\$ | $\mathbf{X}$         | \$\mathbf{X}\$           |
+
+
+
+##自定义命令
+命令\newcommand可以用来定义自己个性的命令。
+例如一般矢量使用加粗的斜体表示，但是latex公式使用\mathbf{X}可以加粗，但不是斜体，那么自定义一个命令\vect，$\newcommand{\vect}[1]{\boldsymbol{#1}}$
+```
+$\newcommand{\vect}[1]{\boldsymbol{#1}}$
+```
+其中[1]表示要修饰一个表达式，{#1}表示要操作的表达式。那么定义上述命令之后，用\vect修饰字符的结果就是加粗的斜体，
+例如而`\mathbf{X}`显示为$\mathbf{X}$，只加粗，而不是斜体。而`$vect{X}`显示为$\vect  {X}$，加粗的斜体。
+再定义命令\SES
+
+```
+$ \newcommand{\SES}[3]{ 0 \to #1 \to #2 \to #3 \to 0 } $
+```
+$ \newcommand{\SES}[3]{ 0 \to #1 \to #2 \to #3 \to 0 } $
+其中[3]表示要修饰3个表达式，{#1}表示要操作的第一个表达式
+那么
+```
+$$ \SES {A}{B}{C} $$
+```
+显示为
+$$
+\SES {A}{B}{C}
+$$
 
 ## 矩阵
 
@@ -54,7 +80,7 @@ $$
 
 带{...}的矩阵
 
-``` \left\{ \begin{matrix}   1 &amp;amp; 2 &amp;amp; 3 \\   4 &amp;amp; 5 &amp;amp; 6 \\   7 &amp;amp; 8 &amp;amp; 9  \end{matrix}  \right\} \tag{2}
+``` \left\{ \begin{matrix}   1 &amp;amp;amp; 2 &amp;amp;amp; 3 \\   4 &amp;amp;amp; 5 &amp;amp;amp; 6 \\   7 &amp;amp;amp; 8 &amp;amp;amp; 9  \end{matrix}  \right\} \tag{2}
 $$
  \left\{
  \begin{matrix}
