@@ -1,0 +1,6 @@
+digraph py_ma_aba
+{
+graph [rankdir=TB,fontsize=10.5,shape="circle",fontname="fangsong",arrowsize=0.5];
+edge [fontname="fangsong",fontsize=12,arrowsize=0.5, color = "darkgreen"];
+node [shape="box",fontname="fangsong",fontsize=12,style = filled, color = "darkgreen", fillcolor =" skyblue"];
+}
