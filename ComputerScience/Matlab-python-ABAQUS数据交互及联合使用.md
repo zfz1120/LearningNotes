@@ -61,6 +61,8 @@ cpus='1';%计算使用的cpu个数
 runabaqus(Path,userFile,InpFile,cpus);%运行abaqus进行计算
 ```
 
+
+
 ## matlab利用python脚本读取odb数据
 
 思路是：matlab把读取数据的要求写入个txt文件（这里是req.txt），调用python脚本，python脚本读取odb的结果数据，并写入另一个txt文件(这里是RF3.txt)，matlab再从txt文件读取数据。首先编写python接口函数，实现从odb提取特定的结果数据。
@@ -169,6 +171,30 @@ OdbFile='unixial-inversion-per.odb';%指定odb文件名
 %调用函数，读取odb数据
 get_history_output(Path,OdbFile,step,req);
 ```
+
+运行程序后，首先matlab把参数写入req.文件。req.txt记录了指定的相关参数，以逗号隔开，每个参数，如下：
+
+```tex
+F:\security folder\ABAQUS WORKING\inversion_per,unixial-inversion-per.odb,Step-1,PLATEN-1,Node PLATEN-1.5322,RF3
+```
+
+然后matlab调用python脚本odbHistoyOutput.py，读取odb数据。odb首先读取req.txt的参数，然后再根据参数去读取odb数据，把结果写入ReqData（即RF3.txt），结果包含时间和反力RF3，如下(部分省略)：
+
+```tex
+0.0000E+00  -0.0000E+00
+1.0000E-02  -0.0000E+00
+2.0000E-02  -0.0000E+00
+3.0000E-02  -0.0000E+00
+5.0000E-02  -0.0000E+00
+9.0000E-02  -2.1087E+01
+1.5000E-01  -7.3267E+01
+2.4000E-01  -1.2684E+02
+3.4000E-01  -1.8037E+02
+4.4000E-01  -2.3264E+02
+......
+```
+
+
 
 ## 小结
 

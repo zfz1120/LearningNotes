@@ -1,0 +1,22 @@
+digraph py_ma_inp
+{
+graph [rankdir=LR,fontsize=10.5,shape="circle",fontname="fangsong",arrowsize=0.5]
+edge [fontname="fangsong",fontsize=12,arrowsize=0.5, color = "darkgreen"];
+node [shape="box",fontname="fangsong",fontsize=12,style = filled, color = "darkgreen", fillcolor =" skyblue"]
+
+py[label="python"]
+ma[label="matlab"]
+inp[label="inp文件"]
+mod[label="modify.txt"]
+new[label="NewData.txt"]
+inp->py[label="读取inp"]
+py->inp[label="修改inp"]
+mod->py[label="读取"]
+new->py[label="读取"]
+ma->mod[label="写入参数"]
+ma->new[label="写入数据"]
+
+
+
+
+}
