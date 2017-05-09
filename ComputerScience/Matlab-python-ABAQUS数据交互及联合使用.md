@@ -54,6 +54,7 @@ end
 clc
 clear
 %inp 文件
+Path='F:\security folder\ABAQUS WORKING\inversion_per';%指定文件所在目录
 InpFile='unixial-inversion-per';%不需要后缀名inp
 userFile='usfeld';%用户子程序
 cpus='1';%计算使用的cpu个数

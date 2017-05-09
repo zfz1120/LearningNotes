@@ -1,6 +1,23 @@
 digraph py_ma_aba
 {
-graph [rankdir=TB,fontsize=10.5,shape="circle",fontname="fangsong",arrowsize=0.5];
+graph [rankdir=LR,fontsize=10.5,shape="circle",fontname="fangsong",arrowsize=0.5]
 edge [fontname="fangsong",fontsize=12,arrowsize=0.5, color = "darkgreen"];
-node [shape="box",fontname="fangsong",fontsize=12,style = filled, color = "darkgreen", fillcolor =" skyblue"];
+node [shape="box",fontname="fangsong",fontsize=12,style = filled, color = "darkgreen", fillcolor =" skyblue"]
+aba[label="ABAQUS"]
+py[label="Python"]
+ma[label="Matlab"]
+txt[label="txt文本数据"]
+id1[label="有限元建模及计算"]
+inp[label="inp文件"]
+id2[label="算法实现"]
+id1->aba
+id2->ma
+aba->py[label="odb数据"]
+py->txt[label="odb数据"]
+txt->py[label="inp参数"]
+txt->ma[label="odb数据"]
+ma->txt[label="inp参数"]
+ma->py[label="调用python"]
+ma->aba[label="提交inp"]
+py->inp[label="修改inp"]
 }
