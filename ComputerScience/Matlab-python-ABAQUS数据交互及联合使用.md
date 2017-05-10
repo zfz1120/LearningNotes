@@ -61,8 +61,6 @@ cpus='1';%计算使用的cpu个数
 runabaqus(Path,userFile,InpFile,cpus);%运行abaqus进行计算
 ```
 
-
-
 ## matlab利用python脚本读取odb数据
 
 思路是：matlab把读取数据的要求写入个txt文件（这里是req.txt），调用python脚本，python脚本读取odb的结果数据，并写入另一个txt文件(这里是RF3.txt)，matlab再从txt文件读取数据。首先编写python接口函数，实现从odb提取特定的结果数据。
@@ -172,6 +170,10 @@ OdbFile='unixial-inversion-per.odb';%指定odb文件名
 get_history_output(Path,OdbFile,step,req);
 ```
 
+## *特别说明*##
+
+这里与历史变量输出的节点或节点集的名称与你在step里设置历史输出指定的节点名是不一样的，与历史变量相关的节点名是系统命名的，但是这些节点名有一定的规律，总是这样的形式“Node+空格+instance name.节点号”，例如我的模型里有一个部件叫PLATEN-1，定义了一个参考点，并把它设置为一个set，在step里设置了输出它的反力RF3，并且我知道了它的的节点号是5322，那么我设置历史变量相关的节点名称是就是“Node PLATEN-1.5322”。这也是和网友一起讨论才弄懂这个问题的。
+
 运行程序后，首先matlab把参数写入req.文件。req.txt记录了指定的相关参数，以逗号隔开，每个参数，如下：
 
 ```tex
@@ -199,3 +201,5 @@ F:\security folder\ABAQUS WORKING\inversion_per,unixial-inversion-per.odb,Step-1
 ## 小结
 
 这里matlab与python脚本之间可能有比较的参数和数据需要传递，因此，我这里先把要传递的参数和数据写入特定的txt文件，然后再由另一程序去读取。其次是这里尽量把每个简单的功能写成函数，这样有助于更容易调试程序，不断添加新功能和集成。这就是增量式开发的思想。
+
+存在疑惑问题欢迎朋友们指正，谢谢！
