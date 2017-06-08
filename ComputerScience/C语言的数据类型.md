@@ -94,3 +94,9 @@ complex.h库包含一些返回复数实部和虚部的函数。
 |          usigned          |      %u       |       八进制：%uo ; 十六进制：%ux        |
 |  long float或long double   | %Ld, %Le, %LE |      八进制： ; 十六进制：%La, %LA       |
 |                           |               |                                 |
+
+--------------
+
+参考资料：
+
+史蒂芬・普拉达. C Primer Plus (第6版) 中文版[M]. 人民邮电出版社, 2016.
