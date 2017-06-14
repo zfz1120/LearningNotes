@@ -1,0 +1,41 @@
+digraph g1
+{
+
+//graph [rankdir=TB,fontsize=10.5,shape="circle",fontname="fangsong",arrowsize=1];
+//edge [fontname="fangsong",fontsize=1,arrowsize=1, color = "darkgreen"];
+//node [shape="box",fontname="fangsong",fontsize=12,style = filled, color = "darkgreen", fillcolor =" skyblue"];
+compound=true
+subgraph f1
+    {
+      a1[label="int num =12345",style=unfilled,color=white]
+      a2[label="以二进制数把1234储存在num中",style=unfilled,color=white]
+      a1->a2
+      a3[shape="record",style=filled,fillcolor=lightgray,color=black,label="<f0>00110000|<f1>00111001"]
+      a2->a3
+    }
+subgraph f2
+    {
+      b1[label="fprintf(fp,\"%d\",num);",style=unfilled,color=white]
+      b2[label="把'1'、'2'、'3'、'4'、'5'\
+      的二进制码写入文件",style=unfilled,color=white]
+      b1->b2
+      b3[shape="record",style=filled,fillcolor=lightgray,color=black, label="
+      <f0>00110001|<f1>0011010|<f2>00110011|<f3>00110101"]
+      b2->b3
+   }
+  subgraph f3
+       {
+         c1[label="fwrite(&num,sizeof(in), 1, fp);",style=unfilled,color=white]
+         c2[label="把值的二进制编码写入文件中",style=unfilled,color=white]
+         c1->c2
+         c3[shape="record",style=filled,fillcolor=lightgray,color=black, label="
+         <f0>00110000|<f1>00111001"]
+         c2->c3
+      }
+
+a3->b1[color=white]
+b3->c1[color=white]
+d1[label="（该图假设整数的大小为16位）",color=white,stryle=unfilled]
+c3->d1[color=white]
+
+}
