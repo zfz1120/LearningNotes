@@ -26,8 +26,7 @@ subgraph f2
   subgraph f3
        {
          c1[label="fwrite(&num,sizeof(in), 1, fp);",style=unfilled,color=white]
-         c2[label="把'1'、'2'、'3'、'4'、'5'\
-         的二进制码写入文件",style=unfilled,color=white]
+         c2[label="把值的二进制编码写入文件中",style=unfilled,color=white]
          c1->c2
          c3[shape="record",style=filled,fillcolor=lightgray,color=black, label="
          <f0>00110000|<f1>00111001"]
