@@ -1,4 +1,5 @@
-csdn ranking change(update at 17:30 every day):
+My csdn ranking change(update at 17:30 every day):
 date            ranking
 2017-6-22	27827
 2017-6-23	27230
+2017-6-24	27243

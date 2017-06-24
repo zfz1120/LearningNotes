@@ -1,8 +1,5 @@
-/*
- * 设计并测试一个函数，从输入中获取下n个字符（包括空白、
- * 制表符、换行符），把结果存储在一个数组里，它的地址
- * 被传递作为一个参数
- * */
+/*修改并编程练习1的函数，在n个字符后停止，或读到第一个空白、制表符或换行时
+ * 停止，哪个先遇到哪个停止。不能只是用scanf()*/
 #include <stdio.h>
 #include<string.h>
 #define LEN 5
@@ -19,5 +16,8 @@ int main(void)
 void strin(char * str)
 {
 	for(int n=0;n<LEN;n++)
-			str[n]=getchar();
+	{
+		if((str[n]=getchar())=='\n' || str[n]=='	' || str[n]==' ')
+				break;
+	}
 }
