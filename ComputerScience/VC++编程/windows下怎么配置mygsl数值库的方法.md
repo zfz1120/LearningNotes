@@ -1,4 +1,4 @@
-windows下怎么配置mygsl数值库的方法
+windows下配置mygsl数值计算c程序库的方法
 
 
 
