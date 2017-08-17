@@ -1,14 +1,18 @@
-[使用MATLAB Coder从MATLAB生成C/C++代码](http://blog.csdn.net/fengbingchun/article/details/6793826)
+# matlab程序转C/C++代码
 
 ## 常用的4种方式
 
-第一种使用Mideva，当然如果你能够搞定那个线程问题，并且永远只使用matlab6以前的版本
+第一种使用Mideva，涉及线程问题，并且永远只使用matlab6以前的版本
 
-第二种就是使用Matlab引擎来调用m文件，也比较简单，但是你必须在目标机器上安装matlab才行，这往往是不现实的。
+第二种就是使用Matlab引擎来调用m文件，也比较简单，但是必须在目标机器上安装matlab才行，这往往是不现实的。
 
 第三种使用mcc将m文件编译成为C/C++代码，然后导入Vc编译，因为常常生成很多源代码，使用很繁琐。
 
 第四种就是使用mcc将m文件编译为头文件、dll和lib然后导入VC编译。目前这是最可行的一种方法。
+
+但是这几种方法都不利于维护，且程序没有可读性。能否适用要看结合自己的情况。这几种方法在这篇博客有比较详细的介绍——[使用MATLAB Coder从MATLAB生成C/C++代码](http://blog.csdn.net/fengbingchun/article/details/6793826)。
+
+## 一个简单的例子
 
 这里是第3种方式的简单例子：
 
@@ -97,3 +101,5 @@ int _tmain(int argc, _TCHAR* argv[])
 参考资料
 
 [举例说明使用MATLAB Coder从MATLAB生成C/C++代码步骤](http://blog.csdn.net/fengbingchun/article/details/6793826)
+
+[使用MATLAB Coder从MATLAB生成C/C++代码](http://blog.csdn.net/fengbingchun/article/details/6793826)
