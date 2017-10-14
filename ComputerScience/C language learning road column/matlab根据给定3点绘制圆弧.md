@@ -23,12 +23,12 @@ p2=pos(2,:);
 p3=pos(3,:);
 %求半径和圆心坐标
 p1p2=p2-p1;
-u1=p1p2/sum(p1p2.^2);
+u1=unitVec(p1p2);%自定义函数，对向量单位化
 
 p2p3=p3-p2;
 u2=unitVec(p2p3);
 
-normal=cross(p1p2,p2p3);
+normal=cross(p1p2,p2p3);%matlab自带的内部函数，求向量叉积
 normal=unitVec(normal);
 
 per2=cross(normal,u2);
@@ -99,6 +99,25 @@ grid on
 axis equal
 end
 ```
+
+自定义函数vecDot()
+
+```matlab
+%求两个向量的点积
+function z=vecDot(x,y)
+z=sum(x.*y);
+```
+
+自定义函数unitVec()
+
+```matlab
+%自定义函数，对向量单位化
+function vector=unitVec(vec)
+vector=vec/sqrt(sum(vec.^2));
+end
+```
+
+
 
 ## 测试例子
 
