@@ -113,6 +113,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\mp_harmonic.c" />
+    <ClCompile Include="test_hamonic_main.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\mp_harmonic.h" />
