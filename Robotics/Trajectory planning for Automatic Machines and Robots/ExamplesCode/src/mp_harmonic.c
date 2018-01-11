@@ -1,7 +1,10 @@
-/*************************************************
-create on: 2018-1-5
-author: LiBing
-*************************************************/
+/**
+* @file mp_harmonic.c
+* @brif 
+*
+* @author LiBing
+* @date 2018/1/9
+*/
 
 #include<math.h>
 #include<mp_harmonic.h>
@@ -11,9 +14,10 @@ author: LiBing
 
 
 #define MIN_ERR  1.0E-5 /*数值比较允许的误差*/
+
 //输入参数
 typedef struct {
-	double t0;
+	double t0;		/*<起始时刻*/
 	double t1;
 	double q0;
 	double q1;
