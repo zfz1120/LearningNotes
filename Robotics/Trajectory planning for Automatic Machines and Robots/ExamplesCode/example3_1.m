@@ -1,6 +1,6 @@
 %{
 使用圆弧过渡线性轨迹,example3.1
-LiBing
+Brian
 2018-12-21,
 %}
 close('all')
@@ -21,6 +21,7 @@ alpha=acos((2.0*h*h+T*sqrt(T*T-3.0*h*h))/(h*h+T*T));
 a0=q0+h*(cos(alpha)-1)/cos(alpha);
 a1=tan(alpha);
 Ta=h*sin(alpha);
+%计算轨迹的离散点
 i=1;
 for t=t0:Ts:t1
     time(i)=t;
