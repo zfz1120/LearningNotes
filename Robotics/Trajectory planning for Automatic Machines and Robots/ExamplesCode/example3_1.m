@@ -38,7 +38,7 @@ for t=t0:Ts:t1
      if(t>=t1-Ta&& t<=t1)
          q(i)=q0+sqrt(h^2-(t1-t)^2);
          dq(i)=(t1-t)/sqrt(h^2-(t1-t)^2);
-         ddq(i)=h^2/sqrt((h^2-(t1-t)^2)^3);
+         ddq(i)=-h^2/sqrt((h^2-(t1-t)^2)^3);
        end  
        i=i+1;   
 end
