@@ -1,4 +1,4 @@
-/**
+﻿/**
 *@brief Description: Test demos of software.
 *@  File:TestDemo.c
 *@Author:LiBing
@@ -28,7 +28,7 @@ void test_MatrixExp6();
 void test_MatrixLog6();
 int main()
 {
-	test_MatrixExp3();
+	test_MatrixLog6();
 	return 0;
 }
 

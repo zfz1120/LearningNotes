@@ -1,4 +1,4 @@
-/**
+ï»¿/**
 *@brief Description: Algorithm module of robotics, according to the
 book [modern robotics : mechanics,planning,and control].
 *@  AlgorithmModule.h
@@ -50,7 +50,7 @@ extern "C" {
 	void VecToso3(double omg[3], double so3Mat[3][3]);
 
 	/**
-	*@brief Description:Returns the 3-vector corresponding to the 3¡Á3 skew-symmetric matrix so3mat.
+	*@brief Description:Returns the 3-vector corresponding to the 3Ã—3 skew-symmetric matrix so3mat.
 	*@param[in]		name
 	*@param[out]	name
 	*@note:
@@ -140,9 +140,9 @@ extern "C" {
 	void se3ToVec(double se3Mat[4][4], double V[6]);
 
 	/**
-	*@brief Description:Computes the 6 ¡Á 6 adjoint representation [AdT ] of the homogeneous transformation matrix T.
+	*@brief Description:Computes the 6 Ã— 6 adjoint representation [AdT ] of the homogeneous transformation matrix T.
 	*@param[in]		T		a homogeneous transformation matrix.
-	*@param[out]	AdT		the 6 ¡Á 6 adjoint representation [AdT ].
+	*@param[out]	AdT		the 6 Ã— 6 adjoint representation [AdT ].
 	*@note:
 	*@waring:
 	*/

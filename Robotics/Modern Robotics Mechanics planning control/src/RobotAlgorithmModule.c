@@ -1,4 +1,4 @@
-/**
+ï»¿/**
 *@brief Description: Algorithm module of robotics, according to the 
 book [modern robotics : mechanics,planning,and control].
 *@File:RobotAlgorithmModule.c
@@ -499,8 +499,8 @@ void TransInv(double T[4][4],double InvT[4][4])
 }
 
 /**
-*@brief Description:Computes the se(3) matrix corresponding to a 6 - vector twist V.
-*@param[in]		V		a 6 - vector twist V.
+*@brief Description:Computes the se(3) matrix corresponding to a 6-vector twist V.
+*@param[in]		V		a 6-vector twist V.
 *@param[out]	se3Mat	the se(3) matrix.
 *@note:
 *@waring:
@@ -552,10 +552,10 @@ void se3ToVec(double se3Mat[4][4],double V[6])
 }
 
 /**
-*@brief Description:Computes the 6 ¡Á 6 adjoint representation [AdT ] 
+*@brief Description:Computes the 6 x 6 adjoint representation [AdT ] 
 of the homogeneous transformation matrix T.
 *@param[in]		T		a homogeneous transformation matrix.
-*@param[out]	AdT		the 6 ¡Á 6 adjoint representation [AdT ].
+*@param[out]	AdT		the 6 x 6 adjoint representation [AdT ].
 *@note:
 *@waring:
 */
