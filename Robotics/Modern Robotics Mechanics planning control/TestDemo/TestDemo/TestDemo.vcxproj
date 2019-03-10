@@ -133,11 +133,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\AlgorithmModule.h" />
+    <ClInclude Include="..\..\src\RobotAlgorithmModule.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\AlgorithmModule.c" />
-    <ClCompile Include="..\..\src\Test_GrublersFormula.cpp" />
+    <ClCompile Include="..\..\src\RobotAlgorithmModule.c" />
+    <ClCompile Include="..\..\src\TestDemo.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
