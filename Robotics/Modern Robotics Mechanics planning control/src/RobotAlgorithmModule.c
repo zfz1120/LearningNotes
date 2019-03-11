@@ -60,6 +60,28 @@ void Matrix3Equal(double a[][3], double b[][3])
 }
 
 /**
+*@brief Description: Make  matrix b equal to  matrix a.
+*@param[in]			a		a 4 x 4  matrix.
+*@param[out]		b		result,b=a.
+*@note:
+*@waring:
+*/
+void Matrix4Equal(double a[][4], double b[][4])
+{
+	int i;
+	int j;
+	for (i = 0; i < 4; i++)
+	{
+		for (j = 0; j < 4; j++)
+		{
+			b[i][j] = a[i][j];
+		}
+	}
+	return;
+}
+
+
+/**
 *@brief Description:Calculate a 3 x 3  matrix add a 3 x 3  matrix.
 *@param[in]		a		a 3 x 3  matrix.
 *@param[in]		b		a 3 x 3  matrix.
@@ -122,6 +144,34 @@ void Matrix3Mult(double a[][3],double b[][3],double c[][3])
 		{
 			c[i][j] = 0.0;
 			for (k=0;k<3;k++)
+			{
+				c[i][j] = c[i][j] + a[i][k] * b[k][j];
+			}
+
+		}
+	}
+	return;
+}
+
+/**
+*@brief Description: Calculate two 4 x 4  matrix multiplication.
+*@param[in]		a		a 4 x 4  matrix.
+*@param[in]		b		a 4 x 4  matrix.
+*@param[out]	c		result of a*b.
+*@note:
+*@waring:
+*/
+void Matrix4Mult(double a[][4], double b[][4], double c[][4])
+{
+	int i;
+	int j;
+	int k;
+	for (i = 0; i < 4; i++)
+	{
+		for (j = 0; j < 4; j++)
+		{
+			c[i][j] = 0.0;
+			for (k = 0; k < 4; k++)
 			{
 				c[i][j] = c[i][j] + a[i][k] * b[k][j];
 			}
@@ -831,6 +881,90 @@ int MatrixLog6(double T[4][4], double se3Mat[4][4])
 		se3Mat[3][1] = 0.0;
 		se3Mat[3][2] = 0.0;
 		se3Mat[3][3] = 0.0;
+	}
+	return 0;
+}
+
+/**
+*@brief Description: Computes the end-effector frame given the zero position of the end-effector M,
+the list of joint screws Slist expressed in the fixed-space frame, and the list of joint values thetalist.
+*@param[in]		M			the zero position of the end-effector expressed in the fixed-space frame.
+*@param[in]		JointNum	the number of joints.
+*@param[in]		Slist		the list of joint screws Slist expressed in the fixed-space frame.
+*@param[in]		thetalist   the list of joint values.
+*@param[out]	T			the end-effector frame expressed in the fixed-space frame.
+*@note:
+*@waring:
+*/
+int FKinSpace(double M[4][4],int  JointNum,double Slist[][6], double thetalist[],double T[4][4])
+{
+	int i;
+	int j;
+	int k;
+	double se3mat[4][4];
+	double T2[4][4];
+	double exp6[4][4];
+	int ret;
+	Matrix4Equal(M, T);
+	for (i= JointNum-1;i>=0;i--)
+	{
+		VecTose3(&Slist[i][0], se3mat);
+		for (j=0;j<4;j++)
+		{
+			for (k=0;k<4;k++)
+			{
+				se3mat[j][k] = se3mat[j][k] * thetalist[i];
+			}
+		}
+		ret=MatrixExp6(se3mat, exp6);
+		if (ret)
+		{
+			return ret;
+		}
+		Matrix4Mult(exp6, T, T2);
+		Matrix4Equal(T2, T);
+	}
+	return 0;
+}
+
+/**
+*@brief Description:Computes the end-effector frame given the zero position of the end-effector M,
+the list of joint screws Blist expressed in the end-effector frame, and the list of joint values thetalist.
+*@param[in]		M			the zero position of the end-effector expressed in the end-effector frame.
+*@param[in]		JointNum	the number of joints.
+*@param[in]		Blist		the list of joint screws Slist expressed in the end-effector frame.
+*@param[in]		thetalist   the list of joint values.
+*@param[out]	T			the end-effector frame expressed in the end-effector frame.
+*@note:
+*@waring:
+*/
+int FKinBody(double M[4][4], int  JointNum, double Blist[][6], double thetalist[], double T[4][4])
+{
+	int i;
+	int j;
+	int k;
+	double se3mat[4][4];
+	double T2[4][4];
+	double exp6[4][4];
+	int ret;
+	Matrix4Equal(M, T);
+	for (i = 0; i < JointNum ; i++)
+	{
+		VecTose3(&Blist[i][0], se3mat);
+		for (j = 0; j < 4; j++)
+		{
+			for (k = 0; k < 4; k++)
+			{
+				se3mat[j][k] = se3mat[j][k] * thetalist[i];
+			}
+		}
+		ret = MatrixExp6(se3mat, exp6);
+		if (ret)
+		{
+			return ret;
+		}
+		Matrix4Mult(T, exp6, T2);
+		Matrix4Equal(T2, T);
 	}
 	return 0;
 }

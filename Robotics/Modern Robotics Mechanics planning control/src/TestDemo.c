@@ -26,9 +26,11 @@ void test_Adjoint();
 void test_AxisAng6();
 void test_MatrixExp6();
 void test_MatrixLog6();
+void test_FKinSpace();
+void test_FKinBody();
 int main()
 {
-	test_MatrixLog6();
+	test_FKinBody();
 	return 0;
 }
 
@@ -351,5 +353,63 @@ void test_MatrixLog6()
 		printf("%lf %lf %lf %lf\n", se3mat[i][0], se3mat[i][1], se3mat[i][2], se3mat[i][3]);
 	}
 
+	return;
+}
+
+void test_FKinSpace()
+{
+	double M[4][4] = {
+		-1, 0, 0, 0,
+		0, 1, 0, 6,
+		0, 0, -1, 2,
+		0, 0, 0, 1 };
+	int JoinNum = 3;
+	double Slist[3][6] = {
+		 0,	 0,  1,  4, 0, 0,
+		 0,  0,  0,  0, 1, 0,
+		 0,  0, -1, -6, 0, -0.1 };
+	double thetalist[3] = { PI / 2,3, PI };
+	double T[4][4];
+	int ret=FKinSpace(M, JoinNum, Slist, thetalist, T);
+	if (ret)
+	{
+		printf("FKinSpace error,ret=%d",ret);
+		return;
+	}
+	int i;
+	printf("T:\n");
+	for (i = 0; i < 4; i++)
+	{
+		printf("%lf %lf %lf %lf\n", T[i][0], T[i][1], T[i][2], T[i][3]);
+	}
+	return;
+}
+
+void test_FKinBody()
+{
+	double M[4][4] = {
+		-1, 0, 0, 0,
+		0, 1, 0, 6,
+		0, 0, -1, 2,
+		0, 0, 0, 1 };
+	int JoinNum = 3;
+	double Blist[3][6] = {
+		0,	 0,  -1, 2, 0, 0,
+		0,   0,   0, 0, 1, 0,
+		0,   0,   1, 0, 0, 0.1 };
+	double thetalist[3] = { PI / 2,3, PI };
+	double T[4][4];
+	int ret=FKinBody(M, JoinNum, Blist, thetalist, T);
+	if (ret)
+	{
+		printf("FKinSpace error,ret=%d", ret);
+		return;
+	}
+	int i;
+	printf("T:\n");
+	for (i = 0; i < 4; i++)
+	{
+		printf("%lf %lf %lf %lf\n", T[i][0], T[i][1], T[i][2], T[i][3]);
+	}
 	return;
 }

@@ -181,6 +181,32 @@ extern "C" {
 	*/
 	int MatrixLog6(double T[4][4], double se3Mat[4][4]);
 
+	/**
+	*@brief Description: Computes the end-effector frame given the zero position of the end-effector M,
+	the list of joint screws Slist expressed in the fixed-space frame, and the list of joint values thetalist.
+	*@param[in]		M			the zero position of the end-effector expressed in the fixed-space frame.
+	*@param[in]		JointNum	the number of joints.
+	*@param[in]		Slist		the list of joint screws Slist expressed in the fixed-space frame.
+	*@param[in]		thetalist   the list of joint values.
+	*@param[out]	T			the end-effector frame expressed in the fixed-space frame.
+	*@note:
+	*@waring:
+	*/
+	int FKinSpace(double M[4][4], int  JointNum, double Slist[][6], double thetalist[], double T[4][4]);
+
+	/**
+	*@brief Description:Computes the end-effector frame given the zero position of the end-effector M,
+	the list of joint screws Blist expressed in the end-effector frame, and the list of joint values thetalist.
+	*@param[in]		M			the zero position of the end-effector expressed in the end-effector frame.
+	*@param[in]		JointNum	the number of joints.
+	*@param[in]		Blist		the list of joint screws Slist expressed in the end-effector frame.
+	*@param[in]		thetalist   the list of joint values.
+	*@param[out]	T			the end-effector frame expressed in the end-effector frame.
+	*@note:
+	*@waring:
+	*/
+	int FKinBody(double M[4][4], int  JointNum, double Blist[][6], double thetalist[], double T[4][4]);
+
 #ifdef __cplusplus
 }
 #endif

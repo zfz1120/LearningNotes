@@ -1,5 +1,7 @@
 # 机器人学之正运动学（forward kinematics）
 
+![机器人正运动学](image\机器人正运动学.gif)
+
 ## 关键概念
 
 - 对于一个开链机器人，给定一个固定参考系{s}和一个固定于连杆的连杆的坐标系{b}, 该坐标系表示机器人末端。正运动学(forward kinematics)是从关节变量$\theta$到坐标系{b}在坐标系{s}中的位置和方向的映射$T(\theta)$。
@@ -32,5 +34,16 @@ $$
 
 ## 指数积公式的算法实现
 
+该部分主要包括两个公式的实现，
 
+- 一个是空间形式的: T = FKinSpace(M,Slist,thetalist) , 给定末端在初始构型M和螺旋轴Blist在固定坐标系的表达，以及关节变量thetalist，计算末端在固定坐标系的构型。
+- 一个是物体坐标系形式的: T = FKinBody(M,Blist,thetalist) , 给定末端在初始构型M和螺旋轴Blist在物体坐标系的表达，以及关节变量thetalist，计算末端在物体坐标系的构型。
+
+实现代码用到了上一篇博客的刚体运动算法，代码较长，就不放在这里了，源码放在github，[链接](https://github.com/libing403/LearningNotes/tree/master/Robotics/Modern%20Robotics%20Mechanics%20planning%20control)
+
+
+
+参考文献
+
+Kenvin M. Lynch , Frank C. Park, Modern Robotics Mechanics,Planning , and Control. May 3, 2017
 
