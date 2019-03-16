@@ -15,6 +15,8 @@ extern "C" {
 	#define		PI					3.14159265358979323846
 	//if the norm of vector is near zero(< 1.0E-6),regard as zero.
 	#define		ZERO_VALUE			1.0E-6		
+	//number of joints,be used when Compute the Jacobian.
+	#define		MAXJOINTNUM			32		
 
 	/**
 	*@brief Description:use GrublersFormula calculate The number of degrees of
@@ -69,7 +71,7 @@ extern "C" {
 	*@note:
 	*@waring:
 	*/
-	int AxisAng3(double expc3[3], double omghat[3], double *theta);
+	void AxisAng3(double expc3[3], double omghat[3], double *theta);
 
 	/**
 	*@brief Description:Computes the rotation matrix R in SO(3) corresponding to
@@ -159,7 +161,7 @@ extern "C" {
 	*@note:
 	*@waring:
 	*/
-	int AxisAng6(double expc6[6], double S[6], double *theta);
+	void AxisAng6(double expc6[6], double S[6], double *theta);
 
 	/**
 	*@brief Description: Computes the homogeneous transformation matrix T in SE(3) corresponding to
@@ -169,7 +171,7 @@ extern "C" {
 	*@note:
 	*@waring:
 	*/
-	int MatrixExp6(double se3Mat[4][4], double T[4][4]);
+	void MatrixExp6(double se3Mat[4][4], double T[4][4]);
 
 	/**
 	*@brief Description: Computes the matrix logarithm se3mat in se(3) of
@@ -179,7 +181,7 @@ extern "C" {
 	*@note:
 	*@waring:
 	*/
-	int MatrixLog6(double T[4][4], double se3Mat[4][4]);
+	void MatrixLog6(double T[4][4], double se3Mat[4][4]);
 
 	/**
 	*@brief Description: Computes the end-effector frame given the zero position of the end-effector M,
@@ -192,7 +194,7 @@ extern "C" {
 	*@note:
 	*@waring:
 	*/
-	int FKinSpace(double M[4][4], int  JointNum, double Slist[][6], double thetalist[], double T[4][4]);
+	void FKinSpace(double M[4][4], int  JointNum, double Slist[][6], double thetalist[], double T[4][4]);
 
 	/**
 	*@brief Description:Computes the end-effector frame given the zero position of the end-effector M,
@@ -205,7 +207,37 @@ extern "C" {
 	*@note:
 	*@waring:
 	*/
-	int FKinBody(double M[4][4], int  JointNum, double Blist[][6], double thetalist[], double T[4][4]);
+	void FKinBody(double M[4][4], int  JointNum, double Blist[][6], double thetalist[], double T[4][4]);
+
+	/**
+	*@brief Description: Computes the body Jacobian Jb(theta) in 6×n given a list of joint screws Bi
+	expressed in the body frame and a list of joint angles.
+	*@param[in]		Blist		The joint screw axes in the end - effector frame when the manipulator is
+	*							at the home position, in the format of a matrix with the screw axes as the column,
+	*							for example ,when n=3,
+	*							Blist[3][6]=
+	*							{wb1,vb1,
+	*							wb2,vb2,
+	*							wb3,vb3}
+	*@param[in]	thetalist		A list of joint coordinates.
+	*@note:
+	*@waring:
+	*/
+	void JacobianBody(int JointNum, double Blist[][MAXJOINTNUM], double thetalist[], double Jb[][MAXJOINTNUM]);
+
+
+	/**
+	*@brief Description:Computes the space Jacobian Js(theta) in R6 x n given a list of joint screws Si
+	expressed in the fixed space frame and a list of joint angles.
+	*@param[in]		Slist		The joint screw axes expressed in the fixed space frame when the manipulator is
+	*							at the home position, in the format of a matrix with the screw axes as the column.
+	*@param[in]		thetalist	A list of joint coordinates.
+	*@retval		 0			success.
+	*@retval		 1			failure,the input parameters are error.
+	*@note:
+	*@waring:
+	*/
+	void JacobianSpace(int JointNum, double Slist[][MAXJOINTNUM], double thetalist[], double Jb[][MAXJOINTNUM]);
 
 #ifdef __cplusplus
 }

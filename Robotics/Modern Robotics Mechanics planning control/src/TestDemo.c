@@ -28,9 +28,11 @@ void test_MatrixExp6();
 void test_MatrixLog6();
 void test_FKinSpace();
 void test_FKinBody();
+void test_JacobianBody();
+void test_JacobianSpace();
 int main()
 {
-	test_FKinBody();
+	test_JacobianSpace();
 	return 0;
 }
 
@@ -111,13 +113,7 @@ void test_AxisAng3()
 	double expc3[3] = { 1,2,3 };
 	double omghat[3] = { 0 };
 	double theta = 0;
-	int ret = AxisAng3(expc3, omghat, &theta);
-	if (ret)
-	{
-		printf("AxisAng3 error,norm of exp3 is 0\n");
-		return ;
-	}
-
+	AxisAng3(expc3, omghat, &theta);
 	printf("expc3:\n");
 	printf("%lf %lf %lf\n", expc3[0], expc3[1], expc3[2]);
 	printf("omg:\n");
@@ -296,12 +292,8 @@ void test_AxisAng6()
 	double expc6[6] = { 0, 0, 0, 0, 0, 0 };
 	double S[6];
 	double theta;
-	int ret = AxisAng6(expc6, S, &theta);
-	if (ret)
-	{
-		printf("failure:the input expc6 is a zero vector \n ");
-		return;
-	}
+	AxisAng6(expc6, S, &theta);
+
 	printf("S:\n");
 	int i;
 	for (i = 0; i < 6; i++)
@@ -370,12 +362,7 @@ void test_FKinSpace()
 		 0,  0, -1, -6, 0, -0.1 };
 	double thetalist[3] = { PI / 2,3, PI };
 	double T[4][4];
-	int ret=FKinSpace(M, JoinNum, Slist, thetalist, T);
-	if (ret)
-	{
-		printf("FKinSpace error,ret=%d",ret);
-		return;
-	}
+	FKinSpace(M, JoinNum, Slist, thetalist, T);
 	int i;
 	printf("T:\n");
 	for (i = 0; i < 4; i++)
@@ -399,17 +386,92 @@ void test_FKinBody()
 		0,   0,   1, 0, 0, 0.1 };
 	double thetalist[3] = { PI / 2,3, PI };
 	double T[4][4];
-	int ret=FKinBody(M, JoinNum, Blist, thetalist, T);
-	if (ret)
-	{
-		printf("FKinSpace error,ret=%d", ret);
-		return;
-	}
+	FKinBody(M, JoinNum, Blist, thetalist, T);
+
 	int i;
 	printf("T:\n");
 	for (i = 0; i < 4; i++)
 	{
 		printf("%lf %lf %lf %lf\n", T[i][0], T[i][1], T[i][2], T[i][3]);
+	}
+	return;
+}
+
+void test_JacobianBody()
+{
+	int JointNum = 4;//n must be the actual number of joints.MAXJOINTNUM is the max number of joints when computes the Jacobian.
+	int i; int j;
+	double Blist[6][MAXJOINTNUM];
+	double Bi[6][4] = {
+		0, 1, 0,   1,
+		0, 0, 1,   0,
+		1, 0, 0,   0,
+		0 ,2, 0,  0.2,
+		0.2,0, 2,  0.3,
+		0.2,3, 1, 0.4
+	};
+	//initial Blist.
+	for (i=0;i<6;i++)
+	{
+		for (j=0;j<JointNum;j++)
+		{
+			Blist[i][j] = Bi[i][j];
+		}
+	}
+	//initial thetalist.
+	double thetalist[MAXJOINTNUM] = { 0.2, 1.1, 0.1, 1.2 };
+	double Jb[6][MAXJOINTNUM] = { {0} };
+	JacobianBody(JointNum, Blist, thetalist,Jb);
+
+	printf("Jb:\n");
+
+	for (i=0;i<6;i++)
+	{
+		for (j=0;j<JointNum;j++)
+		{
+			printf("%lf  ", Jb[i][j]);
+		}
+		printf("\n");
+	}
+	return ;
+}
+
+
+void test_JacobianSpace()
+{
+	int JointNum = 4;//JointNum must be the actual number of joints.MAXJOINTNUM is the max number of joints when use the function computes the Jacobian.
+	int i; int j;
+	double Slist[6][MAXJOINTNUM];
+	double Si[6][4] = {
+		0, 1, 0,   1,
+		0, 0, 1,   0,
+		1, 0, 0,   0,
+		0 ,2, 0,  0.2,
+		0.2,0, 2,  0.3,
+		0.2,3, 1, 0.4
+	};
+	//initial Blist.
+	for (i = 0; i < 6; i++)
+	{
+		for (j = 0; j < JointNum; j++)
+		{
+			Slist[i][j] = Si[i][j];
+		}
+	}
+	//initial thetalist.
+	double thetalist[MAXJOINTNUM] = { 0.2, 1.1, 0.1, 1.2 };
+	double Jb[6][MAXJOINTNUM] = { { 0 } };
+	JacobianSpace(JointNum, Slist, thetalist, Jb);
+
+	printf("Js:\n");
+
+	for (i = 0; i < 6; i++)
+	{
+		for (j = 0; j < JointNum; j++)
+		{
+			printf("%lf  ", Jb[i][j]);
+		}
+		printf("\n");
 	}
 	return;
 }

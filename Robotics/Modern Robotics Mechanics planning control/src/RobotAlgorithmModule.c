@@ -10,7 +10,6 @@ book [modern robotics : mechanics,planning,and control].
 #include "RobotAlgorithmModule.h"
 #include <math.h>
 #include <string.h>
-#include <stdio.h>
 /**
 *@brief Description:use GrublersFormula calculate The number of degrees of 
 freedom of a mechanism with links and joints.
@@ -205,6 +204,29 @@ void Matrix3MultValue(double a[][3], double Value, double c[][3])
 }
 
 /**
+*@brief Description: Calculate  4 x 4  matrix multiply a value.
+*@param[in]		a		a 4 x 4  matrix.
+*@param[in]		Value	a scalar value.
+*@param[out]	c		result of a*Value.
+*@note:
+*@waring:
+*/
+void Matrix4MultValue(double a[][4], double Value, double c[][4])
+{
+	int i;
+	int j;
+	for (i = 0; i < 4; i++)
+	{
+		for (j = 0; j < 4; j++)
+		{
+			c[i][j] = a[i][j] * Value;
+		}
+	}
+	return;
+}
+
+
+/**
 *@brief Description:Computes the result of a 3 x 3 Matrix multiply a 3-vector.
 *@param[in]		R			a 3 x 3 Matrix.
 *@param[in]		vec1		an input of 3-vector.
@@ -346,24 +368,27 @@ rotation angle theta from exponential coordinates omghat*theta for rotation, exp
 *@param[out]	omghat		the unit vector of rotation axis .
 *@param[out]	theta		rotation angle.
 *@retval        0			success.
-*@retval		1			failure,norm of expc3 is zero.
 *@note:
 *@waring:
 */
-int AxisAng3(double expc3[3],double omghat[3],double *theta)
+void AxisAng3(double expc3[3],double omghat[3],double *theta)
 {
 	int i;
 	int ret = 0;
 	*theta = sqrt(expc3[0] * expc3[0] + expc3[1] * expc3[1] + expc3[2] * expc3[2]);
 	if (*theta<ZERO_VALUE)
 	{
-		return 1;
+		omghat[0] = 0.0;
+		omghat[1] = 0.0;
+		omghat[2] = 0.0;
+		*theta = 0.0;
+		return;
 	}
 	for (i=0;i<3;i++)
 	{
 		omghat[i]=expc3[i]/(*theta);
 	}
-	return 0;
+	return ;
 }
 
 /**
@@ -389,8 +414,8 @@ void MatrixExp3(double so3Mat[3][3],double R[3][3])
 		0,0,1
 	};
 	so3ToVec(so3Mat, omgtheta);
-	ret=AxisAng3(omgtheta, omghat, &theta);
-	if (ret)
+	AxisAng3(omgtheta, omghat, &theta);
+	if (theta<ZERO_VALUE)
 	{
 		Matrix3Equal(MatI3, R);
 		return ;
@@ -691,7 +716,7 @@ theta from the 6-vector of exponential coordinates S*theta.
 *@note:
 *@waring:
 */
-int AxisAng6(double expc6[6],double S[6],double *theta)
+void AxisAng6(double expc6[6],double S[6],double *theta)
 {
 	*theta = Vec3Norm(expc6);
 	if (*theta<ZERO_VALUE)
@@ -699,12 +724,15 @@ int AxisAng6(double expc6[6],double S[6],double *theta)
 		*theta = Vec3Norm(&expc6[3]);
 		if (*theta<ZERO_VALUE)
 		{
-			return 1;
+			*theta=0.0;
+			//S is undefine,no motion at all.
+			S[0] = 0.0; S[1] = 0.0; S[2] = 0.0; S[3] = 0.0; S[4] = 0.0; S[5] = 0.0;
+			return;
 		}
 	}
 	Vec3MultValue(expc6, 1.0 / (*theta), S);
 	Vec3MultValue(&expc6[3], 1.0 / (*theta), &S[3]);
-	return 0;
+	return ;
 }
 
 /**
@@ -715,11 +743,10 @@ the matrix exponential of se3mat in se(3).
 *@note:
 *@waring:
 */
-int MatrixExp6(double se3Mat[4][4], double T[4][4])
+void MatrixExp6(double se3Mat[4][4], double T[4][4])
 {
 	int i;
 	int j;
-	int ret;
 	double so3mat[3][3];
 	double omgmat[3][3];
 	double temp[3][3];
@@ -756,13 +783,7 @@ int MatrixExp6(double se3Mat[4][4], double T[4][4])
 	}
 	else
 	{
-		ret=AxisAng3(omgtheta, omghat, &theta);
-		if (ret)
-		{
-			//just for Standard. norm of omgtheta is not zero,so the program will not execute here.
-			return ret;
-		}
-
+		AxisAng3(omgtheta, omghat, &theta);
 		MatrixExp3(so3mat, temp);
 		for (i = 0; i < 3; i++)
 		{
@@ -790,7 +811,7 @@ int MatrixExp6(double se3Mat[4][4], double T[4][4])
 		T[3][2] = 0.0;
 		T[3][3] = 1.0;
 	}
-	return 0;
+	return;
 }
 
 
@@ -802,7 +823,7 @@ the homogeneous transformation matrix T in SE(3)
 *@note:
 *@waring:
 */
-int MatrixLog6(double T[4][4], double se3Mat[4][4])
+void MatrixLog6(double T[4][4], double se3Mat[4][4])
 {
 	int i;
 	int j;
@@ -882,7 +903,7 @@ int MatrixLog6(double T[4][4], double se3Mat[4][4])
 		se3Mat[3][2] = 0.0;
 		se3Mat[3][3] = 0.0;
 	}
-	return 0;
+	return ;
 }
 
 /**
@@ -896,7 +917,7 @@ the list of joint screws Slist expressed in the fixed-space frame, and the list 
 *@note:
 *@waring:
 */
-int FKinSpace(double M[4][4],int  JointNum,double Slist[][6], double thetalist[],double T[4][4])
+void FKinSpace(double M[4][4],int  JointNum,double Slist[][6], double thetalist[],double T[4][4])
 {
 	int i;
 	int j;
@@ -904,7 +925,6 @@ int FKinSpace(double M[4][4],int  JointNum,double Slist[][6], double thetalist[]
 	double se3mat[4][4];
 	double T2[4][4];
 	double exp6[4][4];
-	int ret;
 	Matrix4Equal(M, T);
 	for (i= JointNum-1;i>=0;i--)
 	{
@@ -916,15 +936,11 @@ int FKinSpace(double M[4][4],int  JointNum,double Slist[][6], double thetalist[]
 				se3mat[j][k] = se3mat[j][k] * thetalist[i];
 			}
 		}
-		ret=MatrixExp6(se3mat, exp6);
-		if (ret)
-		{
-			return ret;
-		}
+		MatrixExp6(se3mat, exp6);
 		Matrix4Mult(exp6, T, T2);
 		Matrix4Equal(T2, T);
 	}
-	return 0;
+	return ;
 }
 
 /**
@@ -938,7 +954,7 @@ the list of joint screws Blist expressed in the end-effector frame, and the list
 *@note:
 *@waring:
 */
-int FKinBody(double M[4][4], int  JointNum, double Blist[][6], double thetalist[], double T[4][4])
+void FKinBody(double M[4][4], int  JointNum, double Blist[][6], double thetalist[], double T[4][4])
 {
 	int i;
 	int j;
@@ -946,7 +962,6 @@ int FKinBody(double M[4][4], int  JointNum, double Blist[][6], double thetalist[
 	double se3mat[4][4];
 	double T2[4][4];
 	double exp6[4][4];
-	int ret;
 	Matrix4Equal(M, T);
 	for (i = 0; i < JointNum ; i++)
 	{
@@ -958,13 +973,122 @@ int FKinBody(double M[4][4], int  JointNum, double Blist[][6], double thetalist[
 				se3mat[j][k] = se3mat[j][k] * thetalist[i];
 			}
 		}
-		ret = MatrixExp6(se3mat, exp6);
-		if (ret)
-		{
-			return ret;
-		}
+		MatrixExp6(se3mat, exp6);
 		Matrix4Mult(T, exp6, T2);
 		Matrix4Equal(T2, T);
 	}
-	return 0;
+	return ;
+}
+
+
+/**
+*@brief Description: Computes the body Jacobian Jb(theta) in 6×n given a list of joint screws Bi 
+expressed in the body frame and a list of joint angles.
+*@param[in]		Blist		The joint screw axes in the end - effector frame when the manipulator is 
+*							at the home position, in the format of a matrix with the screw axes as the column.
+*@param[in]		thetalist	A list of joint coordinates.
+*@note:
+*@waring:
+*/
+void JacobianBody(int JointNum,double Blist[][MAXJOINTNUM], double thetalist[],double Jb[][MAXJOINTNUM])
+{
+	int i;
+	int j;
+	int k;
+	double T1[4][4];
+	double T2[4][4];
+	double se3mat[4][4];
+	double V[6];
+	double AdT[6][6];
+	double T[4][4] = {
+		1,0,0,0,
+		0,1,0,0,
+		0,0,1,0,
+		0,0,0,1
+	};
+	//Fist column of Jbn.
+	for (i=0;i<6;i++)
+	{
+		Jb[i][JointNum -1] = Blist[i][JointNum - 1];
+	}
+	//Jbi for i=n-1,n-2,...,1.
+	for (i= JointNum -2;i>=0;i--)
+	{
+		for (j=0;j<6;j++)
+		{
+			V[j] = -1.0*Blist[j][i+1];
+		}
+		VecTose3(V, se3mat);
+		Matrix4MultValue(se3mat, thetalist[i+1], se3mat);
+		MatrixExp6(se3mat, T1);
+		Matrix4Mult(T, T1,T2);
+		Matrix4Equal(T2, T);
+		Adjoint(T, AdT);
+		for (j=0;j<6; j++)
+		{
+			Jb[j][i] = 0;
+			for (k=0;k<6;k++)
+			{
+				Jb[j][i] = Jb[j][i] + AdT[j][k] * Blist[k][i];
+			}
+		}
+	}
+	return ;
+}
+
+/**
+*@brief Description:Computes the space Jacobian Js(theta) in R6 x n given a list of joint screws Si 
+expressed in the fixed space frame and a list of joint angles.
+*@param[in]		Slist		The joint screw axes expressed in the fixed space frame when the manipulator is
+*							at the home position, in the format of a matrix with the screw axes as the column.
+*@param[in]		thetalist	A list of joint coordinates.
+*@retval		 0			success.
+*@retval		 1			failure,the input parameters are error.
+*@note:
+*@waring:
+*/
+void JacobianSpace(int JointNum, double Slist[][MAXJOINTNUM], double thetalist[], double Jb[][MAXJOINTNUM])
+{
+	int i;
+	int j;
+	int k;
+	double T1[4][4];
+	double T2[4][4];
+	double se3mat[4][4];
+	double V[6];
+	double AdT[6][6];
+	double T[4][4] = {
+		1,0,0,0,
+		0,1,0,0,
+		0,0,1,0,
+		0,0,0,1
+	};
+	//Fist column of Js.
+	for (i = 0; i < 6; i++)
+	{
+		Jb[i][0] = Slist[i][0];
+	}
+	//Jsi for i=2,3,...,n.
+	for (i = 1; i <JointNum; i++)
+	{
+		for (j = 0; j < 6; j++)
+		{
+			V[j] = Slist[j][i - 1];
+		}
+		VecTose3(V, se3mat);
+		Matrix4MultValue(se3mat, thetalist[i - 1], se3mat);
+		MatrixExp6(se3mat, T1);
+		Matrix4Mult(T, T1, T2);
+		Matrix4Equal(T2, T);
+		Adjoint(T, AdT);
+		for (j = 0; j < 6; j++)
+		{
+			Jb[j][i] = 0;
+			for (k = 0; k < 6; k++)
+			{
+				Jb[j][i] = Jb[j][i] + AdT[j][k] * Slist[k][i];
+			}
+		}
+	}
+	return;
 }
