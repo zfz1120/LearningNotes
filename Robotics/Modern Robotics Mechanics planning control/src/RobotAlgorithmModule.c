@@ -4,7 +4,6 @@
  * @file:			RobotAlgorithmModule.c
  * @author:			LiBing
  * @date:			2019/03/01 12:23
- * Copyright(c) 	2019 LiBing. All rights reserved. 
  *					https://blog.csdn.net/libing403   
  * Contact 			1540845930@qq.com
  * @note:     
@@ -1865,7 +1864,7 @@ int IKinSpaceNR(int JointNum, double *Slist, double M[4][4], double T[4][4], dou
 	int k;
 	for (k = 0; k < JointNum; k++)
 	{
-		printf("%4.6lf\t", thetalist[k]);
+		printf("%4.4lf, ", thetalist[k]);
 	}
 	printf("\n");
 	////////////////////////////////////
@@ -1894,7 +1893,7 @@ int IKinSpaceNR(int JointNum, double *Slist, double M[4][4], double T[4][4], dou
 		printf("iteration:%4d  thetalist:  ", i);
 		for (k = 0; k < JointNum; k++)
 		{
-			printf("%4.6lf\t", thetalist[k]);
+			printf("%4.4lf, ", thetalist[k]);
 		}
 		printf("\n");
 		//////////////////////////////////////

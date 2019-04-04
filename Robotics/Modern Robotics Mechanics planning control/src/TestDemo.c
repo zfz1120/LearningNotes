@@ -3,7 +3,6 @@
  * @file:			TestDemo.c
  * @author:			LiBing
  * @date:			2019/03/01 12:20
- * Copyright(c) 	2019 LiBing. All rights reserved. 
  *					https://blog.csdn.net/libing403  					 
  * Contact 			1540845930@qq.com
  * @note:     
@@ -779,38 +778,14 @@ void test_IKOnUR3()
 		0 ,        0  ,       0,    1.0000,
 	};
 	double T[4][4] = {
-		0.0000, - 1.0000,         0,   50.0000,
-		1.0000,    0.0000 ,        0,  275.0000,
-		0 ,        0 ,   1.0000,  160.0000,
-		0   ,      0   ,      0 ,   1.0000
+		1.0000,        0 ,        0,   10.0000,
+		0,   0.0000,    1.0000,  375.0000,
+		0, -1.0000 ,   0.0000 , 200.0000,
+		0,         0 ,        0 ,   1.0000
 	};
-	//double Slist[6][6] = {
-	//	0 ,        0  ,       0  ,       0 ,   1.0000,         0,
-	//	0 ,   1.0000,    1.0000,    1.0000 ,        0  ,  1.0000,
-	//	1.0000,         0  ,       0    ,     0  ,       0  ,       0,
-	//	0 ,-151.9000 ,-151.9000 ,-448.3000  ,       0, -448.3000,
-	//	0 ,        0 ,        0,         0,  448.3000,         0,
-	//	0 ,        0,  243.6500,  243.6500, -110.4000,  243.6500
-	//};
-	//double M[4][4] =
-	//{
-	//	1.0000,         0 ,        0  , 327.5853,
-	//	0 ,   1.0000 ,        0,		200,
-	//	0  ,       0 ,   1.0000 ,	 364.9,
-	//	0  ,       0 ,        0,    1.0000
-	//};
-	//double T[4][4] = {
-	//	0.5,		-0.866,         0,   70.0000,
-	//	0.866,    0.5,			0,  350,
-	//	0,         0 ,		1.0000,	360,
-	//	0 ,        0 ,        0 ,   1.0000,
-	//};
-
-
-
 	double thetalist0[6] = { 0,0,0,0,0,0 };
-	double eomg = 0.01;
-	double ev = 0.001;
+	double eomg = 1.0E-4;
+	double ev = 1.0E-3;
 	double thetalist[6] = { 0 };
 	int maxiter = 20;
 	int ret = IKinSpaceNR(JointNum, (double *)Slist, M, T, thetalist0, eomg, ev, maxiter, thetalist);
@@ -819,12 +794,12 @@ void test_IKOnUR3()
 		printf("IKinSpace error %d\n", ret);
 		return;
 	}
-	printf("solution thetalist for A:\n");
+	printf("solution thetalist for C(单位：弧度):\n");
 	int i;
 	for (i = 0; i < JointNum; i++)
 	{
-		printf("%lf  ", thetalist[i]);
+		printf("%lf, ",thetalist[i]);
 	}
-	printf("\n");
+	printf("\n\n");
 	return;
 }

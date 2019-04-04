@@ -4,7 +4,6 @@
  * @file:			RobotAlgorithmModule.h
  * @author:			LiBing
  * @date:			2019/03/01 12:50
- * Copyright(c) 	2019 LiBing. All rights reserved. 
  *					https://blog.csdn.net/libing403 
  * @note:     
  * @warning: 		
