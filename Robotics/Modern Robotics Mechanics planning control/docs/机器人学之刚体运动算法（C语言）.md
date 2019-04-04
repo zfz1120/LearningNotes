@@ -12,13 +12,17 @@
 
 ```c
 /**
-*@brief Description: Algorithm module of robotics, according to the
-book [modern robotics : mechanics,planning,and control].
-*@  AlgorithmModule.h
-*@Author:LiBing
-*@  Date:2019/03/01
-*@  note:     
-*@warning: 
+ * @brief			Description: Algorithm module of robotics, according to the
+ *					book[modern robotics : mechanics, planning, and control].
+ * @file:			RobotAlgorithmModule.h
+ * @author:			LiBing
+ * @date:			2019/03/01 12:50
+ * Copyright(c) 	2019 LiBing. All rights reserved. 
+ *					https://blog.csdn.net/libing403                               
+ * 					 
+ * Contact 			1540845930@qq.com
+ * @note:     
+ * @warning: 		
 */
 #ifndef RobotALGORITHMMODULE_H_
 #define RobotALGORITHMMODULE_H_
@@ -28,10 +32,11 @@ extern "C" {
 	#define		PI					3.14159265358979323846
 	//if the norm of vector is near zero(< 1.0E-6),regard as zero.
 	#define		ZERO_VALUE			1.0E-6		
+	//number of joints,be used when Compute the Jacobian.	
 
 	/**
-	*@brief Description:use GrublersFormula calculate The number of degrees of
-	freedom of a mechanism with links and joints.
+	*@brief			Description:use GrublersFormula calculate The number of degrees of
+	*				freedom of a mechanism with links and joints.
 	*@param[in]		N		the number of links( including the ground ).
 	*@param[in]		m		the number of degrees of freedom of a rigid body
 	*						(m = 3 for planar mechanisms and m = 6 for spatial mechanisms).
@@ -46,7 +51,7 @@ extern "C" {
 	int GrublersFormula(int m, int N,  int J, int *f);
 
 	/**
-	*@brief Computes the inverse of the rotation matrix R.
+	*@brief			Computes the inverse of the rotation matrix R.
 	*@param[in]		R		rotation matrix .
 	*@param[out]	InvR	inverse matrix of R.
 	*@note					Input R must be a 3x3 rotation matrix.
@@ -54,7 +59,7 @@ extern "C" {
 	void RotInv(double R[3][3], double InvR[3][3]);
 
 	/**
-	*@brief Description:Returns the 3 x 3 skew-symmetric matrix corresponding to omg.
+	*@brief			Description:Returns the 3 x 3 skew-symmetric matrix corresponding to omg.
 	*@param[in]		omg		a unit 3-vector.
 	*@param[out]	so3Mat	the 3 x 3 skew-symmetric matrix corresponding to omg.
 	*@note:
@@ -63,17 +68,17 @@ extern "C" {
 	void VecToso3(double omg[3], double so3Mat[3][3]);
 
 	/**
-	*@brief Description:Returns the 3-vector corresponding to the 3×3 skew-symmetric matrix so3mat.
-	*@param[in]		name
-	*@param[out]	name
+	*@brief			Description:Returns the 3-vector corresponding to the 3×3 skew-symmetric matrix so3mat.
+	*@param[in]		so3Mat		the 3×3 skew-symmetric matrix so3mat. 
+	*@param[out]	omg			the 3-vector.
 	*@note:
 	*@waring:
 	*/
 	void so3ToVec(double so3Mat[3][3], double omg[3]);
 
 	/**
-	*@brief Description:Extracts  the unit rotation axis omghat and the corresponding rotation angle theta from
-	exponential coordinates omghat*theta for rotation, expc3.
+	*@brief			Description:Extracts  the unit rotation axis omghat and the corresponding rotation angle theta from
+	*				exponential coordinates omghat*theta for rotation, expc3.
 	*@param[in]		expc3
 	*@param[out]	omghat		the unit vector of rotation axis .
 	*@param[out]	theta		rotation angle.
@@ -82,11 +87,11 @@ extern "C" {
 	*@note:
 	*@waring:
 	*/
-	int AxisAng3(double expc3[3], double omghat[3], double *theta);
+	void AxisAng3(double expc3[3], double omghat[3], double *theta);
 
 	/**
-	*@brief Description:Computes the rotation matrix R in SO(3) corresponding to
-	the matrix exponential of so3mat in so(3).
+	*@brief			Description:Computes the rotation matrix R in SO(3) corresponding to
+	*				the matrix exponential of so3mat in so(3).
 	*@param[in]		so3Mat		[omghat]*theta,matrix exponential of so3mat in so(3).
 	*@param[out]	R			rotation matrix R in SO(3).
 	*@note:
@@ -95,7 +100,7 @@ extern "C" {
 	void MatrixExp3(double so3Mat[3][3], double R[3][3]);
 
 	/**
-	*@brief Description:Computes the matrix logarithm so3mat in so(3) of the rotation matrix R in SO(3).
+	*@brief			Description:Computes the matrix logarithm so3mat in so(3) of the rotation matrix R in SO(3).
 	*@param[in]		R		the rotation matrix
 	*@param[out]	so3Mat	matrix logarithm
 	*@note:
@@ -104,8 +109,8 @@ extern "C" {
 	void MatrixLog3(double R[3][3], double so3Mat[3][3]);
 
 	/**
-	*@brief Description:Builds the homogeneous transformation matrix T corresponding to a rotation
-	matrix R in SO(3) and a position vector p in R3.
+	*@brief			Description:Builds the homogeneous transformation matrix T corresponding to a rotation
+	*				matrix R in SO(3) and a position vector p in R3.
 	*@param[in]		R		a rotation matrix R in SO(3).
 	*@param[in]		p		a position vector p in R3.
 	*@param[out]	T		the homogeneous transformation matrix T.
@@ -115,8 +120,8 @@ extern "C" {
 	void RpToTrans(double R[3][3], double p[3], double T[4][4]);
 
 	/**
-	*@brief Description: Extracts the rotation matrix R and position vector p
-	from a homogeneous transformation matrix T.
+	*@brief			Description: Extracts the rotation matrix R and position vector p
+	*				from a homogeneous transformation matrix T.
 	*@param[in]		T		a homogeneous transformation matrix.
 	*@param[out]	R		the rotation matrix.
 	*@param[out]	p		position vector.
@@ -126,7 +131,7 @@ extern "C" {
 	void TransToRp(double T[4][4], double R[3][3], double p[3]);
 
 	/**
-	*@brief Description:Computes the inverse of a homogeneous transformation matrix T.
+	*@brief			Description:Computes the inverse of a homogeneous transformation matrix T.
 	*@param[in]		T		a homogeneous transformation matrix.
 	*@param[out]	InvT	the inverse of T.
 	*@note:
@@ -135,7 +140,7 @@ extern "C" {
 	void TransInv(double T[4][4], double InvT[4][4]);
 
 	/**
-	*@brief Description:Computes the se(3) matrix corresponding to a 6 - vector twist V.
+	*@brief			Description:Computes the se(3) matrix corresponding to a 6 - vector twist V.
 	*@param[in]		V		a 6 - vector twist V.
 	*@param[out]	se3Mat	the se(3) matrix.
 	*@note:
@@ -144,7 +149,7 @@ extern "C" {
 	void VecTose3(double V[6], double se3Mat[4][4]);
 
 	/**
-	*@brief Description:Computes the 6-vector twist corresponding to an se(3) matrix se3mat.
+	*@brief			Description:Computes the 6-vector twist corresponding to an se(3) matrix se3mat.
 	*@param[in]		se3Mat			an se(3) matrix.
 	*@param[out]	V				he 6-vector twist.
 	*@note:
@@ -153,7 +158,7 @@ extern "C" {
 	void se3ToVec(double se3Mat[4][4], double V[6]);
 
 	/**
-	*@brief Description:Computes the 6 × 6 adjoint representation [AdT ] of the homogeneous transformation matrix T.
+	*@brief			Description:Computes the 6 × 6 adjoint representation [AdT ] of the homogeneous transformation matrix T.
 	*@param[in]		T		a homogeneous transformation matrix.
 	*@param[out]	AdT		the 6 × 6 adjoint representation [AdT ].
 	*@note:
@@ -162,8 +167,8 @@ extern "C" {
 	void Adjoint(double T[4][4], double AdT[6][6]);
 
 	/**
-	*@brief Description: Extracts the normalized screw axis S and the distance traveled along the screw
-	theta from the 6-vector of exponential coordinates S*theta.
+	*@brief			Description: Extracts the normalized screw axis S and the distance traveled along the screw
+	*				theta from the 6-vector of exponential coordinates S*theta.
 	*@param[in]		expc6		the 6-vector of exponential coordinates.
 	*@param[out]	S			the normalized screw axis.
 	*@param[out]	theta		the distance traveled along the screw.
@@ -172,33 +177,27 @@ extern "C" {
 	*@note:
 	*@waring:
 	*/
-	int AxisAng6(double expc6[6], double S[6], double *theta);
+	void AxisAng6(double expc6[6], double S[6], double *theta);
 
 	/**
-	*@brief Description: Computes the homogeneous transformation matrix T in SE(3) corresponding to
-	the matrix exponential of se3mat in se(3).
+	*@brief			Description: Computes the homogeneous transformation matrix T in SE(3) corresponding to
+	*				the matrix exponential of se3mat in se(3).
 	*@param[in]		se3mat			the matrix exponential of se3mat in se(3).
 	*@param[out]	T				the homogeneous transformation matrix T in SE(3).
 	*@note:
 	*@waring:
 	*/
-	int MatrixExp6(double se3Mat[4][4], double T[4][4]);
+	void MatrixExp6(double se3Mat[4][4], double T[4][4]);
 
 	/**
-	*@brief Description: Computes the matrix logarithm se3mat in se(3) of
-	the homogeneous transformation matrix T in SE(3)
+	*@brief			Description: Computes the matrix logarithm se3mat in se(3) of
+	*				the homogeneous transformation matrix T in SE(3)
 	*@param[in]		T			the homogeneous transformation matrix.
 	*@param[out]	se3Mat		the matrix logarithm of T.
 	*@note:
 	*@waring:
 	*/
-	int MatrixLog6(double T[4][4], double se3Mat[4][4]);
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif//RobotALGORITHMMODULE_H_
+	void MatrixLog6(double T[4][4], double se3Mat[4][4]);
 ```
 
 ##实现文件
@@ -207,18 +206,24 @@ extern "C" {
 
 ```c
 /**
-*@brief Description: Algorithm module of robotics, according to the 
-book [modern robotics : mechanics,planning,and control].
-*@File:RobotAlgorithmModule.c
-*@Author:LiBing
-*@Date:2019/03/01
-*@note:     
-*@warning: 
+ * @brief			Description: Algorithm module of robotics, according to the
+ *					book[modern robotics : mechanics, planning, and control].
+ * @file:			RobotAlgorithmModule.c
+ * @author:			LiBing
+ * @date:			2019/03/01 12:23
+ * Copyright(c) 	2019 LiBing. All rights reserved. 
+ *					https://blog.csdn.net/libing403                               				 
+ * Contact 			1540845930@qq.com
+ * @note:     
+ * @warning: 		
 */
+
 #include "RobotAlgorithmModule.h"
 #include <math.h>
 #include <string.h>
+#include <stdlib.h>
 #include <stdio.h>
+
 /**
 *@brief Description:use GrublersFormula calculate The number of degrees of 
 freedom of a mechanism with links and joints.
@@ -250,6 +255,7 @@ int GrublersFormula(int m, int N, int J, int *f)
 *@brief Description: Make  matrix b equal to  matrix a.
 *@param[in]			a		a 3 x 3  matrix.
 *@param[out]		b		result,b=a.
+*@return		No return value.
 *@note:
 *@waring:
 */
@@ -268,10 +274,34 @@ void Matrix3Equal(double a[][3], double b[][3])
 }
 
 /**
+*@brief Description: Make  matrix b equal to  matrix a.
+*@param[in]			a		a 4 x 4  matrix.
+*@param[out]		b		result,b=a.
+*@return		No return value.
+*@note:
+*@waring:
+*/
+void Matrix4Equal(double a[][4], double b[][4])
+{
+	int i;
+	int j;
+	for (i = 0; i < 4; i++)
+	{
+		for (j = 0; j < 4; j++)
+		{
+			b[i][j] = a[i][j];
+		}
+	}
+	return;
+}
+
+
+/**
 *@brief Description:Calculate a 3 x 3  matrix add a 3 x 3  matrix.
 *@param[in]		a		a 3 x 3  matrix.
 *@param[in]		b		a 3 x 3  matrix.
 *@param[out]	c		result of a+b.
+*@return		No return value.
 *@note:
 *@waring:
 */
@@ -294,6 +324,7 @@ void Matrix3Add(double a[][3], double b[][3], double c[][3])
 *@param[in]		a		a 3 x 3  matrix.
 *@param[in]		b		a 3 x 3  matrix.
 *@param[out]	c		result of a-b.
+*@return		No return value.
 *@note:
 *@waring:
 */
@@ -316,6 +347,7 @@ void Matrix3Sub(double a[][3], double b[][3], double c[][3])
 *@param[in]		a		a 3 x 3  matrix.		
 *@param[in]		b		a 3 x 3  matrix.	
 *@param[out]	c		result of a*b.
+*@return		No return value.
 *@note:
 *@waring:
 */
@@ -339,12 +371,42 @@ void Matrix3Mult(double a[][3],double b[][3],double c[][3])
 	return;
 }
 
+/**
+*@brief Description: Calculate two 4 x 4  matrix multiplication.
+*@param[in]		a		a 4 x 4  matrix.
+*@param[in]		b		a 4 x 4  matrix.
+*@param[out]	c		result of a*b.
+*@return		No return value.
+*@note:
+*@waring:
+*/
+void Matrix4Mult(double a[][4], double b[][4], double c[][4])
+{
+	int i;
+	int j;
+	int k;
+	for (i = 0; i < 4; i++)
+	{
+		for (j = 0; j < 4; j++)
+		{
+			c[i][j] = 0.0;
+			for (k = 0; k < 4; k++)
+			{
+				c[i][j] = c[i][j] + a[i][k] * b[k][j];
+			}
+
+		}
+	}
+	return;
+}
+
 
 /**
 *@brief Description: Calculate  3 x 3  matrix multiply a value.
 *@param[in]		a		a 3 x 3  matrix.
 *@param[in]		Value	a scalar value.
 *@param[out]	c		result of a*Value.
+*@return		No return value.
 *@note:
 *@waring:
 */
@@ -363,10 +425,35 @@ void Matrix3MultValue(double a[][3], double Value, double c[][3])
 }
 
 /**
+*@brief Description: Calculate  4 x 4  matrix multiply a value.
+*@param[in]		a		a 4 x 4  matrix.
+*@param[in]		Value	a scalar value.
+*@param[out]	c		result of a*Value.
+*@return		No return value.
+*@note:
+*@waring:
+*/
+void Matrix4MultValue(double a[][4], double Value, double c[][4])
+{
+	int i;
+	int j;
+	for (i = 0; i < 4; i++)
+	{
+		for (j = 0; j < 4; j++)
+		{
+			c[i][j] = a[i][j] * Value;
+		}
+	}
+	return;
+}
+
+
+/**
 *@brief Description:Computes the result of a 3 x 3 Matrix multiply a 3-vector.
 *@param[in]		R			a 3 x 3 Matrix.
 *@param[in]		vec1		an input of 3-vector.
 *@param[out]	vec2		the output result of 3-vector.
+*@return		No return value.
 *@note:
 *@waring:
 */
@@ -390,6 +477,7 @@ void Matrix3MultVec(double R[3][3], double vec1[3], double vec2[3])
 *@param[in]		vec1		a 3-vector.
 *@param[in]		vec2		a 3-vector.
 *@param[out]	vec3		result of vec1 + vec2;
+*@return		No return value.
 *@note:
 *@waring:
 */
@@ -407,6 +495,7 @@ void Vec3Add(double vec1[3], double vec2[3], double vec3[3])
 *@param[in]		vec1		a first 3-vector.
 *@param[in]		vec2		a first 3-vector.
 *@param[out]	vec3		result of vec1 cross product vec2.
+*@return		No return value.
 *@note:
 *@waring:
 */
@@ -423,6 +512,7 @@ void Vec3Cross(double vec1[3],double vec2[3],double vec3[3])
 *@param[in]		vec1			a 3-vector.
 *@param[in]		value			a scalar value.
 *@param[out]	vec2			result of vec1 * value. 
+*@return		No return value.
 *@note:
 *@waring:
 */
@@ -438,6 +528,7 @@ void Vec3MultValue(double vec1[3], double value, double vec2[3])
 *@brief Description: Computes the norm of a 3-vector.
 *@param[in]		vec			an input 3-vector.
 *@retval		the norm of a an input 3-vector.
+*@return		No return value.
 *@note:
 *@waring:
 */
@@ -446,11 +537,83 @@ double Vec3Norm(double vec[3])
 	return sqrt(vec[0] * vec[0] + vec[1] * vec[1] + vec[2] * vec[2]);
 }
 
+/**
+*@brief			Copy  matrix from a to  b .
+*@param[in]		a		First matrix.
+*@param[in]		m		rows of matrix a.
+*@param[in]		n		columns of matrix a.
+*@param[in]		b		Second matrix.
+*@return		No return value.
+*@note:
+*@waring:
+*/
+void MatrixCopy(const double *a, int m, int n, double *b)
+{
+	memcpy(b, a, m*n * sizeof(double));
+	return;
+}
 
 /**
-*@brief Computes the inverse of the rotation matrix R.
+*@brief			Computes Matrix transpose.
+*@param[in]		a			a matrix.
+*@param[in]		m			rows of matrix a.
+*@param[in]		n			columns of matrix a.
+*@param[out]	b			transpose of matrix a.
+*@return		No return value.
+*@note:
+*@waring:
+*/
+void MatrixT(double *a, int m, int n, double *b)
+{
+	int i, j;
+	for (i = 0; i < m; i++)
+	{
+		for (j = 0; j < n; j++)
+		{
+			b[j*m + i] = a[i*n + j];
+		}
+	}
+	return;
+}
+
+
+
+/**
+*@brief			Computes matrix multiply.
+*@param[in]		a		First matrix.
+*@param[in]		m		rows of matrix a.
+*@param[in]		n		columns of matrix b.
+*@param[in]		b		Second matrix.
+*@param[in]		l		columns of matrix b.
+*@param[out]	c		result of a*b.
+*@return		No return value.
+*@note:
+*@waring:
+*/
+void MatrixMult(const double *a, int m, int n, const double *b, int l, double *c)
+{
+	int i, j, k;
+	for (i = 0; i < m; i++)
+	{
+		for (j = 0; j < l; j++)
+		{
+			c[i*l + j] = 0.0;
+			for (k = 0; k < n; k++)
+			{
+				c[i*l + j] = c[i*l + j] + a[i*n + k] * b[k*l + j];
+			}
+		}
+	}
+	return;
+}
+
+
+
+/**
+*@brief			Computes the inverse of the rotation matrix R.
 *@param[in]		R		rotation matrix .
 *@param[out]	InvR	inverse matrix of R.
+*@return		No return value.
 *@note					Input R must be a 3 x 3 rotation matrix.
 */
 void RotInv(double R[3][3], double InvR[3][3])
@@ -471,6 +634,7 @@ void RotInv(double R[3][3], double InvR[3][3])
 *@brief Description:Returns the 3 x 3 skew-symmetric matrix corresponding to omg.
 *@param[in]		omg		a 3-vector.
 *@param[out]	so3Mat	the 3 x 3 skew-symmetric matrix corresponding to omg.
+*@return		No return value.
 *@note:
 *@waring:
 */
@@ -484,9 +648,10 @@ void VecToso3(double omg[3],double so3Mat[3][3])
 
 
 /**
-*@brief Description:Returns the 3-vector corresponding to the 3 x 3 skew-symmetric matrix so3mat.
-*@param[in]		so3Mat		a 3 x 3 skew-symmetric matrix so3mat
-*@param[out]	omg			the 3-vector
+*@brief			Description:Returns the 3-vector corresponding to the 3 x 3 skew-symmetric matrix so3mat.
+*@param[in]		so3Mat		a 3 x 3 skew-symmetric matrix so3mat.
+*@param[out]	omg			the 3-vector.
+*@return		No return value.
 *@note:
 *@waring:
 */
@@ -498,37 +663,41 @@ void so3ToVec(double so3Mat[3][3], double omg[3])
 
 
 /**
-*@brief Description:Extracts  the unit rotation axis omghat and the corresponding
-rotation angle theta from exponential coordinates omghat*theta for rotation, expc3.
+*@brief			Description:Extracts  the unit rotation axis omghat and the corresponding
+*				rotation angle theta from exponential coordinates omghat*theta for rotation, expc3.
 *@param[in]		expc3			
 *@param[out]	omghat		the unit vector of rotation axis .
 *@param[out]	theta		rotation angle.
-*@retval        0			success.
-*@retval		1			failure,norm of expc3 is zero.
+*@return		No return value.
 *@note:
 *@waring:
 */
-int AxisAng3(double expc3[3],double omghat[3],double *theta)
+void AxisAng3(double expc3[3],double omghat[3],double *theta)
 {
 	int i;
 	int ret = 0;
 	*theta = sqrt(expc3[0] * expc3[0] + expc3[1] * expc3[1] + expc3[2] * expc3[2]);
 	if (*theta<ZERO_VALUE)
 	{
-		return 1;
+		omghat[0] = 0.0;
+		omghat[1] = 0.0;
+		omghat[2] = 0.0;
+		*theta = 0.0;
+		return;
 	}
 	for (i=0;i<3;i++)
 	{
 		omghat[i]=expc3[i]/(*theta);
 	}
-	return 0;
+	return ;
 }
 
 /**
-*@brief Description:Computes the rotation matrix R in SO(3) corresponding to
-the matrix exponential of so3mat in so(3).
+*@brief			Description:Computes the rotation matrix R in SO(3) corresponding to
+*				the matrix exponential of so3mat in so(3).
 *@param[in]		so3Mat		[omghat]*theta,matrix exponential of so3mat in so(3).			
 *@param[out]	R			rotation matrix R in SO(3).
+*@return		No return value.
 *@note:
 *@waring:
 */
@@ -547,8 +716,8 @@ void MatrixExp3(double so3Mat[3][3],double R[3][3])
 		0,0,1
 	};
 	so3ToVec(so3Mat, omgtheta);
-	ret=AxisAng3(omgtheta, omghat, &theta);
-	if (ret)
+	AxisAng3(omgtheta, omghat, &theta);
+	if (theta<ZERO_VALUE)
 	{
 		Matrix3Equal(MatI3, R);
 		return ;
@@ -573,9 +742,10 @@ void MatrixExp3(double so3Mat[3][3],double R[3][3])
 }
 
 /**
-*@brief Description:Computes the matrix logarithm so3mat in so(3) of the rotation matrix R in SO(3).
+*@brief			Description:Computes the matrix logarithm so3mat in so(3) of the rotation matrix R in SO(3).
 *@param[in]		R		the rotation matrix.
 *@param[out]	so3Mat	matrix logarithm.
+*@return		No return value.
 *@note:
 *@waring:
 */
@@ -630,11 +800,12 @@ void MatrixLog3(double R[3][3],double so3Mat[3][3])
 }
 
 /**
-*@brief Description:Builds the homogeneous transformation matrix T corresponding to a rotation 
-matrix R in SO(3) and a position vector p in R3.
+*@brief					Description:Builds the homogeneous transformation matrix T corresponding to a rotation 
+*						matrix R in SO(3) and a position vector p in R3.
 *@param[in]		R		a rotation matrix R in SO(3).
 *@param[in]		p		a position vector p in R3.
 *@param[out]	T		the homogeneous transformation matrix T.
+*@return		No return value.
 *@note:
 *@waring:
 */
@@ -665,6 +836,7 @@ from a homogeneous transformation matrix T.
 *@param[in]		T		a homogeneous transformation matrix.
 *@param[out]	R		the rotation matrix.
 *@param[out]	p		position vector.
+*@return		No return value.
 *@note:
 *@waring:
 */
@@ -689,6 +861,7 @@ void TransToRp(double T[4][4], double R[3][3], double p[3])
 *@brief Description:Computes the inverse of a homogeneous transformation matrix T.
 *@param[in]		T		a homogeneous transformation matrix.
 *@param[out]	InvT	the inverse of T.
+*@return		No return value.
 *@note:
 *@waring:
 */
@@ -707,9 +880,10 @@ void TransInv(double T[4][4],double InvT[4][4])
 }
 
 /**
-*@brief Description:Computes the se(3) matrix corresponding to a 6 - vector twist V.
-*@param[in]		V		a 6 - vector twist V.
+*@brief Description:Computes the se(3) matrix corresponding to a 6-vector twist V.
+*@param[in]		V		a 6-vector twist V.
 *@param[out]	se3Mat	the se(3) matrix.
+*@return		No return value.
 *@note:
 *@waring:
 */
@@ -745,6 +919,7 @@ void VecTose3(double V[6], double se3Mat[4][4])
 *@brief Description:Computes the 6-vector twist corresponding to an se(3) matrix se3mat.
 *@param[in]		se3Mat			an se(3) matrix.
 *@param[out]	V				he 6-vector twist.
+*@return		No return value.
 *@note:
 *@waring:
 */
@@ -760,10 +935,11 @@ void se3ToVec(double se3Mat[4][4],double V[6])
 }
 
 /**
-*@brief Description:Computes the 6 × 6 adjoint representation [AdT ] 
+*@brief Description:Computes the 6 x 6 adjoint representation [AdT ] 
 of the homogeneous transformation matrix T.
 *@param[in]		T		a homogeneous transformation matrix.
-*@param[out]	AdT		the 6 × 6 adjoint representation [AdT ].
+*@param[out]	AdT		the 6 x 6 adjoint representation [AdT ].
+*@return		No return value.
 *@note:
 *@waring:
 */
@@ -812,12 +988,13 @@ void Adjoint(double T[4][4], double AdT[6][6])
 }
 
 /**
-*@brief Description: Computes a normalized screw axis representation S of a screw described by 
-a unit vector s in the direction of the screw axis, located at the point q, with pitch h.
+*@brief			Description: Computes a normalized screw axis representation S of a screw described by 
+*				a unit vector s in the direction of the screw axis, located at the point q, with pitch h.
 *@param[in]		q		a point lying on the screw axis.
 *@param[in]		s		a unit vector in the direction of the screw axis.
 *@param[in]		h		the pitch of the screw axis.
 *@param[in]		S		a normalized screw axis representation.
+*@return		No return value.
 *@note:
 *@waring:
 */
@@ -844,12 +1021,11 @@ theta from the 6-vector of exponential coordinates S*theta.
 *@param[in]		expc6		the 6-vector of exponential coordinates.
 *@param[out]	S			the normalized screw axis.
 *@param[out]	theta		the distance traveled along the screw.
-*@retval		0			success; 
-*@retval		1			failure,because the input expc6 is a zero vector
+*@return		No return value.
 *@note:
 *@waring:
 */
-int AxisAng6(double expc6[6],double S[6],double *theta)
+void AxisAng6(double expc6[6],double S[6],double *theta)
 {
 	*theta = Vec3Norm(expc6);
 	if (*theta<ZERO_VALUE)
@@ -857,27 +1033,30 @@ int AxisAng6(double expc6[6],double S[6],double *theta)
 		*theta = Vec3Norm(&expc6[3]);
 		if (*theta<ZERO_VALUE)
 		{
-			return 1;
+			*theta=0.0;
+			//S is undefine,no motion at all.
+			S[0] = 0.0; S[1] = 0.0; S[2] = 0.0; S[3] = 0.0; S[4] = 0.0; S[5] = 0.0;
+			return;
 		}
 	}
 	Vec3MultValue(expc6, 1.0 / (*theta), S);
 	Vec3MultValue(&expc6[3], 1.0 / (*theta), &S[3]);
-	return 0;
+	return ;
 }
 
 /**
-*@brief Description: Computes the homogeneous transformation matrix T in SE(3) corresponding to
-the matrix exponential of se3mat in se(3).
+*@brief			Description: Computes the homogeneous transformation matrix T in SE(3) corresponding to
+*				the matrix exponential of se3mat in se(3).
 *@param[in]		se3mat			the matrix exponential of se3mat in se(3).
 *@param[out]	T				the homogeneous transformation matrix T in SE(3).
+*@return		No return value.
 *@note:
 *@waring:
 */
-int MatrixExp6(double se3Mat[4][4], double T[4][4])
+void MatrixExp6(double se3Mat[4][4], double T[4][4])
 {
 	int i;
 	int j;
-	int ret;
 	double so3mat[3][3];
 	double omgmat[3][3];
 	double temp[3][3];
@@ -914,13 +1093,7 @@ int MatrixExp6(double se3Mat[4][4], double T[4][4])
 	}
 	else
 	{
-		ret=AxisAng3(omgtheta, omghat, &theta);
-		if (ret)
-		{
-			//just for Standard. norm of omgtheta is not zero,so the program will not execute here.
-			return ret;
-		}
-
+		AxisAng3(omgtheta, omghat, &theta);
 		MatrixExp3(so3mat, temp);
 		for (i = 0; i < 3; i++)
 		{
@@ -948,7 +1121,7 @@ int MatrixExp6(double se3Mat[4][4], double T[4][4])
 		T[3][2] = 0.0;
 		T[3][3] = 1.0;
 	}
-	return 0;
+	return;
 }
 
 
@@ -957,10 +1130,11 @@ int MatrixExp6(double se3Mat[4][4], double T[4][4])
 the homogeneous transformation matrix T in SE(3)
 *@param[in]		T			the homogeneous transformation matrix.			
 *@param[out]	se3Mat		the matrix logarithm of T.
+*@return		No return value.
 *@note:
 *@waring:
 */
-int MatrixLog6(double T[4][4], double se3Mat[4][4])
+void MatrixLog6(double T[4][4], double se3Mat[4][4])
 {
 	int i;
 	int j;
@@ -1040,8 +1214,9 @@ int MatrixLog6(double T[4][4], double se3Mat[4][4])
 		se3Mat[3][2] = 0.0;
 		se3Mat[3][3] = 0.0;
 	}
-	return 0;
+	return ;
 }
+
 ```
 
 ##测试demo
@@ -1050,17 +1225,20 @@ int MatrixLog6(double T[4][4], double se3Mat[4][4])
 
 ```c
 /**
-*@brief Description: Test demos of software.
-*@  File:TestDemo.c
-*@Author:LiBing
-*@  Date:2019/03/01
-*@  note:     
-*@warning: 
+ * @brief			Description: Test Demos for robot algorithm modules.
+ * @file:			TestDemo.c
+ * @author:			LiBing
+ * @date:			2019/03/01 12:20
+ * Copyright(c) 	2019 LiBing. All rights reserved. 
+ *					https://blog.csdn.net/libing403  					 
+ * Contact 			1540845930@qq.com
+ * @note:     
+ * @warning: 		
 */
 #include <stdio.h>
 #include <math.h>
 #include "RobotAlgorithmModule.h"
-
+#define M_PI  3.14159265358979323846
 void test_GrublersFormula();
 void test_RotInv();
 void test_VecToso3();
@@ -1079,7 +1257,7 @@ void test_MatrixExp6();
 void test_MatrixLog6();
 int main()
 {
-	test_MatrixLog6();
+	test_JacobianSpace();
 	return 0;
 }
 
@@ -1160,13 +1338,7 @@ void test_AxisAng3()
 	double expc3[3] = { 1,2,3 };
 	double omghat[3] = { 0 };
 	double theta = 0;
-	int ret = AxisAng3(expc3, omghat, &theta);
-	if (ret)
-	{
-		printf("AxisAng3 error,norm of exp3 is 0\n");
-		return ;
-	}
-
+	AxisAng3(expc3, omghat, &theta);
 	printf("expc3:\n");
 	printf("%lf %lf %lf\n", expc3[0], expc3[1], expc3[2]);
 	printf("omg:\n");
@@ -1345,12 +1517,8 @@ void test_AxisAng6()
 	double expc6[6] = { 0, 0, 0, 0, 0, 0 };
 	double S[6];
 	double theta;
-	int ret = AxisAng6(expc6, S, &theta);
-	if (ret)
-	{
-		printf("failure:the input expc6 is a zero vector \n ");
-		return;
-	}
+	AxisAng6(expc6, S, &theta);
+
 	printf("S:\n");
 	int i;
 	for (i = 0; i < 6; i++)
@@ -1404,6 +1572,7 @@ void test_MatrixLog6()
 
 	return;
 }
+
 ```
 
 接下来继续学习机器人的正运动学和逆运动学，以及基本算法的实现。

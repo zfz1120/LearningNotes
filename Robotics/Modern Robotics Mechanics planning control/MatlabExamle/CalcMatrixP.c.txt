@@ -1,0 +1,580 @@
+﻿#include "CalcMatrix.h"
+#define SIGN(a,b) ((b) >= 0.0 ? fabs(a) : -fabs(a))
+#define MAX(a,b) (a>b?a:b)
+#define MIN(a,b) (a<b?a:b)
+
+//矩阵过大，二维数组需要放到全局变量区域
+double v[MaxDataNum][MaxDataNum] = { 0 };//特征向量矩阵
+double temp[MaxDataNum][MaxDataNum] = { 0 };
+double Matrix_UT[MaxDataNum][MaxDataNum] = { 0 };//U转置
+
+
+static double PYTHAG(double a, double b)
+{
+	double at = fabs(a), bt = fabs(b), ct, result;
+
+	if (at > bt) { ct = bt / at; result = at * sqrt(1.0 + ct * ct); }
+	else if (bt > 0.0) { ct = at / bt; result = bt * sqrt(1.0 + ct * ct); }
+	else result = 0.0;
+	return(result);
+}
+
+/**奇异矩阵求逆，首先对其进行SUV分解*/
+/**计算矩阵的SVD分解,只针对方阵和行数大于列数得矩阵
+*@param a 表示求逆的矩阵 （返回矩阵U）
+*@param m 矩阵的行数
+*@param n 矩阵得列数
+*@param w 矩阵得特征值数组
+*@param v 矩阵得特征向量数组 （返回矩阵V）
+@note 该函数实现过程参照《Numeric recipes in C 》
+*/
+int dsvd(double a[][MaxDataNum], int m, int n, double w[])
+{
+		int flag, i, its, j, jj, k, l, nm;
+		double c, f, h, s, x, y, z;
+		double anorm = 0.0, g = 0.0, scale = 0.0;
+		double rv1[MaxDataNum] = { 0 };
+		/* Householder reduction to bidiagonal form */
+		for (i = 0; i < n; i++)
+		{
+			/* left-hand reduction */
+			l = i + 1;
+			rv1[i] = scale * g;
+			g = s = scale = 0.0;
+			if (i < m)
+			{
+				for (k = i; k < m; k++)
+					scale += fabs(a[k][i]);
+				if (scale)
+				{
+					for (k = i; k < m; k++)
+					{
+						a[k][i] = (a[k][i] / scale);
+						s += (a[k][i] * a[k][i]);
+					}
+					f = a[i][i];
+					g = -SIGN(sqrt(s), f);
+					h = f * g - s;
+					a[i][i] = (f - g);
+					if (i != n - 1)
+					{
+						for (j = l; j < n; j++)
+						{
+							for (s = 0.0, k = i; k < m; k++)
+								s += (a[k][i] * a[k][j]);
+							f = s / h;
+							for (k = i; k < m; k++)
+								a[k][j] += (f * a[k][i]);
+						}
+					}
+					for (k = i; k < m; k++)
+						a[k][i] = (a[k][i] * scale);
+				}
+			}
+			w[i] = (scale * g);
+
+			/* right-hand reduction */
+			g = s = scale = 0.0;
+			if (i < m && i != n - 1)
+			{
+				for (k = l; k < n; k++)
+					scale += fabs(a[i][k]);
+				if (scale)
+				{
+					for (k = l; k < n; k++)
+					{
+						a[i][k] = (a[i][k] / scale);
+						s += (a[i][k] * a[i][k]);
+					}
+					f = a[i][l];
+					g = -SIGN(sqrt(s), f);
+					h = f * g - s;
+					a[i][l] = (f - g);
+					for (k = l; k < n; k++)
+						rv1[k] = a[i][k] / h;
+					if (i != m - 1)
+					{
+						for (j = l; j < m; j++)
+						{
+							for (s = 0.0, k = l; k < n; k++)
+								s += (a[j][k] * a[i][k]);
+							for (k = l; k < n; k++)
+								a[j][k] += (s * rv1[k]);
+						}
+					}
+					for (k = l; k < n; k++)
+						a[i][k] = (a[i][k] * scale);
+				}
+			}
+			anorm = MAX(anorm, (fabs(w[i]) + fabs(rv1[i])));
+		}
+
+		/* accumulate the right-hand transformation */
+		for (i = n - 1; i >= 0; i--)
+		{
+			if (i < n - 1)
+			{
+				if (g)
+				{
+					for (j = l; j < n; j++)
+						v[j][i] = ((a[i][j] / a[i][l]) / g);
+					/* double division to avoid underflow */
+					for (j = l; j < n; j++)
+					{
+						for (s = 0.0, k = l; k < n; k++)
+							s += (a[i][k] * v[k][j]);
+						for (k = l; k < n; k++)
+							v[k][j] += (s * v[k][i]);
+					}
+				}
+				for (j = l; j < n; j++)
+					v[i][j] = v[j][i] = 0.0;
+			}
+			v[i][i] = 1.0;
+			g = rv1[i];
+			l = i;
+		}
+
+		/* accumulate the left-hand transformation */
+		for (i = n - 1; i >= 0; i--)
+		{
+			l = i + 1;
+			g = w[i];
+			if (i < n - 1)
+				for (j = l; j < n; j++)
+					a[i][j] = 0.0;
+			if (g)
+			{
+				g = 1.0 / g;
+				if (i != n - 1)
+				{
+					for (j = l; j < n; j++)
+					{
+						for (s = 0.0, k = l; k < m; k++)
+							s += (a[k][i] * a[k][j]);
+						f = (s / a[i][i]) * g;
+						for (k = i; k < m; k++)
+							a[k][j] += (f * a[k][i]);
+					}
+				}
+				for (j = i; j < m; j++)
+					a[j][i] = (a[j][i] * g);
+			}
+			else
+			{
+				for (j = i; j < m; j++)
+					a[j][i] = 0.0;
+			}
+			++a[i][i];
+		}
+
+		/* diagonalize the bidiagonal form */
+		for (k = n - 1; k >= 0; k--)
+		{                             /* loop over singular values */
+			for (its = 0; its < 30; its++)
+			{                         /* loop over allowed iterations */
+				flag = 1;
+				for (l = k; l >= 0; l--)
+				{                     /* test for splitting */
+					nm = l - 1;
+					if (fabs(rv1[l]) + anorm == anorm)
+					{
+						flag = 0;
+						break;
+					}
+					if (fabs(w[nm]) + anorm == anorm)
+						break;
+				}
+				if (flag)
+				{
+					c = 0.0;
+					s = 1.0;
+					for (i = l; i <= k; i++)
+					{
+						f = s * rv1[i];
+						if (fabs(f) + anorm != anorm)
+						{
+							g = w[i];
+							h = PYTHAG(f, g);
+							w[i] = h;
+							h = 1.0 / h;
+							c = g * h;
+							s = (-f * h);
+							for (j = 0; j < m; j++)
+							{
+								y = a[j][nm];
+								z = a[j][i];
+								a[j][nm] = (y * c + z * s);
+								a[j][i] = (z * c - y * s);
+							}
+						}
+					}
+				}
+				z = w[k];
+				if (l == k)
+				{                  /* convergence */
+					if (z < 0.0)
+					{              /* make singular value nonnegative */
+						w[k] = (-z);
+						for (j = 0; j < n; j++)
+							v[j][k] = (-v[j][k]);
+					}
+					break;
+				}
+				if (its >= 30) {
+
+					return(0);
+				}
+
+				/* shift from bottom 2 x 2 minor */
+				x = w[l];
+				nm = k - 1;
+				y = w[nm];
+				g = rv1[nm];
+				h = rv1[k];
+				f = ((y - z) * (y + z) + (g - h) * (g + h)) / (2.0 * h * y);
+				g = PYTHAG(f, 1.0);
+				f = ((x - z) * (x + z) + h * ((y / (f + SIGN(g, f))) - h)) / x;
+
+				/* next QR transformation */
+				c = s = 1.0;
+				for (j = l; j <= nm; j++)
+				{
+					i = j + 1;
+					g = rv1[i];
+					y = w[i];
+					h = s * g;
+					g = c * g;
+					z = PYTHAG(f, h);
+					rv1[j] = z;
+					c = f / z;
+					s = h / z;
+					f = x * c + g * s;
+					g = g * c - x * s;
+					h = y * s;
+					y = y * c;
+					for (jj = 0; jj < n; jj++)
+					{
+						x = v[jj][j];
+						z = v[jj][i];
+						v[jj][j] = (x * c + z * s);
+						v[jj][i] = (z * c - x * s);
+					}
+					z = PYTHAG(f, h);
+					w[j] = z;
+					if (z)
+					{
+						z = 1.0 / z;
+						c = f * z;
+						s = h * z;
+					}
+					f = (c * g) + (s * y);
+					x = (c * y) - (s * g);
+					for (jj = 0; jj < m; jj++)
+					{
+						y = a[jj][j];
+						z = a[jj][i];
+						a[jj][j] = (y * c + z * s);
+						a[jj][i] = (z * c - y * s);
+					}
+				}
+				rv1[l] = 0.0;
+				rv1[k] = f;
+				w[k] = x;
+			}
+		}
+return 0;
+}
+
+
+
+
+
+/**计算矩阵的逆,只针对满秩的矩阵
+*@param a_matrix 表示求逆的矩阵
+*@param ndimen 矩阵的维数
+*@note 该函数用于对满秩矩阵求逆
+*/
+void matrix_inv_mod1(double a_matrix[][MaxDataNum], int ndimen)
+{
+	double tmp, tmp2, b_tmp[MaxDataNum], c_tmp[MaxDataNum];
+	int k, k1, k2, k3, j, i, j2, i2, kme[MaxDataNum], kmf[MaxDataNum];
+	i2 = j2 = 0;
+
+	for (k = 0; k < ndimen; k++)
+	{
+		tmp2 = 0.0;
+		for (i = k; i < ndimen; i++)
+		{
+			for (j = k; j < ndimen; j++)
+			{
+				if (fabs(a_matrix[i][j]) <= fabs(tmp2))
+					continue;
+				tmp2 = a_matrix[i][j];
+				i2 = i;
+				j2 = j;
+			}
+		}
+		if (i2 != k)
+		{
+			for (j = 0; j < ndimen; j++)
+			{
+				tmp = a_matrix[i2][j];
+				a_matrix[i2][j] = a_matrix[k][j];
+				a_matrix[k][j] = tmp;
+			}
+		}
+		if (j2 != k)
+		{
+			for (i = 0; i < ndimen; i++)
+			{
+				tmp = a_matrix[i][j2];
+				a_matrix[i][j2] = a_matrix[i][k];
+				a_matrix[i][k] = tmp;
+			}
+		}
+		kme[k] = i2;
+		kmf[k] = j2;
+		for (j = 0; j < ndimen; j++)
+		{
+			if (j == k)
+			{
+				b_tmp[j] = 1.0 / tmp2;
+				c_tmp[j] = 1.0;
+			}
+			else
+			{
+				b_tmp[j] = -a_matrix[k][j] / tmp2;
+				c_tmp[j] = a_matrix[j][k];
+			}
+			a_matrix[k][j] = 0.0;
+			a_matrix[j][k] = 0.0;
+		}
+		for (i = 0; i < ndimen; i++)
+		{
+			for (j = 0; j < ndimen; j++)
+			{
+				a_matrix[i][j] = a_matrix[i][j] + c_tmp[i] * b_tmp[j];
+			}
+		}
+	}
+	for (k3 = 0; k3 < ndimen; k3++)
+	{
+		k = ndimen - k3 - 1;
+		k1 = kme[k];
+		k2 = kmf[k];
+		if (k1 != k)
+		{
+			for (i = 0; i < ndimen; i++)
+			{
+				tmp = a_matrix[i][k1];
+				a_matrix[i][k1] = a_matrix[i][k];
+				a_matrix[i][k] = tmp;
+			}
+		}
+		if (k2 != k)
+		{
+			for (j = 0; j < ndimen; j++)
+			{
+				tmp = a_matrix[k2][j];
+				a_matrix[k2][j] = a_matrix[k][j];
+				a_matrix[k][j] = tmp;
+			}
+		}
+	}
+}
+
+
+/**计算矩阵乘法，纯矩阵之间的运算
+*@param a_matrix 表示输出矩阵
+*@param b_matrix 乘号左边的矩阵
+*@param c_matrix 乘号右边的矩阵
+*@param krow  乘号左边的矩阵的行数
+*@param kline  乘号右边的矩阵的列数
+*@param kmiddle  乘号左边的矩阵的列数（乘号右边矩阵的行数）
+*@note a_matrix=b_matrix*c_matrix
+*/
+void matrix_multip(double a_matrix[][MaxDataNum], const double b_matrix[][MaxDataNum], const double c_matrix[][MaxDataNum], \
+	int krow, int kline, int kmiddle)
+{
+	int k, k2, k4;
+	double stmp;
+	for (k = 0; k < krow; k++)
+	{
+		for (k2 = 0; k2 < kline; k2++)
+		{
+			stmp = 0.0;
+			for (k4 = 0; k4 < kmiddle; k4++)
+			{
+				stmp += b_matrix[k][k4] * c_matrix[k4][k2];
+			}
+			a_matrix[k][k2] = stmp;
+		}
+	}
+}
+
+
+
+/**计算矩阵乘法,与点的运算
+*@param a_matrix 表示输出矩阵
+*@param b_matrix 乘号左边的矩阵
+*@param c_matrix 乘号右边的矩阵
+*@param krow  乘号左边的矩阵的行数
+*@param kline  乘号右边的矩阵的列数
+*@param kmiddle  乘号左边的矩阵的列数（乘号右边矩阵的行数）
+*@note a_matrix=b_matrix*c_matrix
+*/
+void matrix_multip_mod1( Point a_matrix[], const double b_matrix[][MaxDataNum], const  Point c_matrix[], \
+	int krow, int kline, int kmiddle)
+{
+	int i, j;
+	 Point stmp;
+	for (i = 0; i < krow; i++)
+	{
+			stmp.x = 0.0;
+			stmp.y = 0.0;
+			stmp.z = 0.0;
+			for (j = 0; j < kmiddle; j++)
+			{
+				stmp.x += b_matrix[i][j] * c_matrix[j].x;
+				stmp.y += b_matrix[i][j] * c_matrix[j].y;
+				stmp.z += b_matrix[i][j] * c_matrix[j].z;
+			}
+			a_matrix[i].x = stmp.x;
+			a_matrix[i].y = stmp.y;
+			a_matrix[i].z = stmp.z;
+	}
+
+}
+
+
+/**计算矩阵转置
+*@param a_matrix 表示转置之后的矩阵
+*@param b_matrix 转置之前的矩阵
+*@param krow  乘号左边的矩阵的行数
+*@param kline  乘号右边的矩阵的列数
+*/
+void matrix_t(double a_matrix[][MaxDataNum], const double b_matrix[][MaxDataNum], int krow, int kline)
+{
+	int k, k2;
+	for (k = 0; k < krow; k++)
+	{
+		for (k2 = 0; k2 < kline; k2++)
+		{
+			a_matrix[k2][k] = b_matrix[k][k2];
+		}
+	}
+}
+
+
+/*矩阵求伪逆解
+*@param a_matrix 表示输出矩阵
+*@param krow  乘号左边的矩阵的行数
+*@param kline  乘号右边的矩阵的列数
+*@note 针对本系统通常只需解决方阵，即krow=kline
+*/
+void matrix_pinv(double a_matrix[][MaxDataNum], int m, int n)
+{	
+	double w[MaxDataNum] = { 0 };//特征值矩阵
+	int i, j,mn; 
+
+	mn = MAX(m, n);
+	dsvd(a_matrix, mn, mn,w);
+
+	//printf("...........U.........\n");
+	//for (i = 0; i < m; i++)
+	//{
+	//	for (j = 0; j < m; j++)
+	//	{
+	//		printf("%lf, ",a_matrix[i][j]);
+	//	}
+	//	printf("\n");
+	//}
+	//printf("..........V.........\n");
+	//for (i = 0; i < n; i++)
+	//{
+	//	for (j = 0; j < n; j++)
+	//	{
+	//		printf("%lf, ", v[i][j]);
+	//	}
+	//	printf("\n");
+	//}
+
+	//printf("..........W.........\n");
+	//for (i = 0; i < m; i++)
+	//{
+
+	//		printf("%lf\n", w[i]);
+
+	//}
+	//对特征矩阵求逆：即特征值求倒数，对于0特征值保持
+	for (i = 0; i < mn; i++)
+	{
+		if (w[i]>1e-10)
+		{
+			w[i] = 1.0 / w[i];
+		}
+	}
+
+	//根据MATLAB可知特征值向量与特征矩阵对应元素相乘
+	for (i = 0; i < n; i++)
+	{
+		for (j = 0; j < n; j++)
+		{
+			temp[i][j] = v[i][j] * w[j];
+		}
+	}
+	//求转置
+	matrix_t(Matrix_UT, a_matrix,mn,mn);
+
+	matrix_multip(a_matrix, temp, Matrix_UT, mn, mn, mn);
+
+
+	//for (i = 0; i < mn; i++)
+	//{
+	//	for (j = 0; j < mn; j++)
+	//	{
+	//		printf("%lf, ",a_matrix[i][j]);
+	//	}
+	//	printf("\n");
+	//}
+
+	//清零
+	for (i = 0; i < mn; i++)
+	{
+		for (j = 0; j < mn; j++)
+		{
+			Matrix_UT[i][j] = 0;
+			temp[i][j] = 0;
+			v[i][j] = 0;
+		}
+	}
+}
+
+/*矩阵求秩
+*@param a_matrix 表示输出矩阵
+*@param krow  乘号左边的矩阵的行数
+*@param kline  乘号右边的矩阵的列数
+*@note 返回值为矩阵的特征值个数即秩
+*@note 针对本系统通常只需解决方阵，即m=n
+*/
+int CalcRank(double a_matrix[][MaxDataNum], int m, int n)
+{
+	double w[MaxDataNum] = { 0 };//特征值
+	int i, count=0, mn;
+
+	mn = MAX(m, n);
+	dsvd(a_matrix, mn, mn, w);
+
+	for (i = 0; i < m; i++)
+	{
+		if (w[i] > 1.0e-10)
+		{
+			count++;
+		}
+	}
+	return count;
+}
+
+
+

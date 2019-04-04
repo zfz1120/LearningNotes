@@ -196,7 +196,140 @@ $$
 注意到，我们不需要对正运动学模型进行微分，就可以直接获得整个雅可比。
 
 ## 算法实现（C语言）
-基于指数坐标计算雅可比的算法，我已用C语言实现，包括两个函数JacobianBody和JacobianSpace 。源码参见github--[链接](https://github.com/libing403/LearningNotes/tree/master/Robotics/Modern%20Robotics%20Mechanics%20planning%20control)
+基于指数坐标计算雅可比的算法，我已用C语言实现，包括两个函数JacobianBody和JacobianSpace 。下面只列出这两个函数的实现。代码不断更新迭代，完整的最新源码参见github--[链接](https://github.com/libing403/LearningNotes/tree/master/Robotics/Modern%20Robotics%20Mechanics%20planning%20control)
+
+```c
+/**
+ * @brief			Description: Algorithm module of robotics, according to the
+ *					book[modern robotics : mechanics, planning, and control].
+ * @file:			RobotAlgorithmModule.c
+ * @author:			LiBing
+ * @date:			2019/03/01 12:23
+ * Copyright(c) 	2019  LiBing. All rights reserved. 
+ *					https://blog.csdn.net/libing403   
+ * Contact 			1540845930@qq.com
+ * @note:     
+ * @warning: 		
+*/
+
+/**
+*@brief Description: Computes the body Jacobian Jb(theta) in 6×n given a list of joint screws Bi 
+expressed in the body frame and a list of joint angles.
+*@param[in]		Blist		The joint screw axes in the end - effector frame when the manipulator is 
+*							at the home position, in the format of a matrix with the screw axes as the row.
+*@param[in]		thetalist	A list of joint coordinates.
+*@param[out]	Jb			Body Jacobian matrix.
+*@return        No return value.
+*@note:			 when Blist and Jb are matrixes ,make sure that columns number of Slist or Jb is equal to JointNum,
+*				 rows number of Slist or Jb is 6 .The function call should be written as
+*				 JacobianSpace(JointNum,(double *)Slist,thetalist,(double *)Jb).
+*@waring:
+*/
+void JacobianBody(int JointNum,double *Blist, double *thetalist,double *Jb)
+{
+	int i;
+	int j;
+	int k;
+	double T1[4][4];
+	double T2[4][4];
+	double se3mat[4][4];
+	double V[6];
+	double AdT[6][6];
+	double T[4][4] = {
+		1,0,0,0,
+		0,1,0,0,
+		0,0,1,0,
+		0,0,0,1
+	};
+	//Fist column of Jbn.
+	for (i=0;i<6;i++)
+	{
+		Jb[i*JointNum+JointNum -1] = Blist[i*JointNum + JointNum-1];
+	}
+	//Jbi for i=n-1,n-2,...,1.
+	for (i= JointNum -2;i>=0;i--)
+	{
+		for (j=0;j<6;j++)
+		{
+			V[j] = -1.0*Blist[j*JointNum+i+1];
+		}
+		VecTose3(V, se3mat);
+		Matrix4MultValue(se3mat, thetalist[i + 1], se3mat);
+		MatrixExp6(se3mat, T1);
+		Matrix4Mult(T, T1,T2);
+		Matrix4Equal(T2, T);
+		Adjoint(T, AdT);
+		for (j=0;j<6; j++)
+		{
+			Jb[j*JointNum + i] = 0;
+			for (k=0;k<6;k++)
+			{
+				Jb[j*JointNum + i] = Jb[j*JointNum + i] + AdT[j][k] * Blist[k*JointNum + i];
+			}
+		}
+	}
+	return ;
+}
+
+/**
+*@brief			Description:Computes the space Jacobian Js(theta) in R6 x n given a list of joint screws Si 
+*				expressed in the fixed space frame and a list of joint angles.
+*@param[in]		Slist		The joint screw axes expressed in the fixed space frame when the manipulator is
+*							at the home position, in the format of a matrix with the screw axes as the column.
+*@param[in]		thetalist	A list of joint coordinates.
+*@param[out]	Js			Space Jacobian matrix.
+*@return		 No return value.
+*@note:			 when Slist and Js are matrixes ,make sure that columns number of Slist or Js is equal to JointNum,
+*				 rows number of Slist or Js is 6 .The function call should be written as 
+*				 JacobianSpace(JointNum,(double *)Slist,thetalist,(double *)Js).
+*@waring:
+*/
+void JacobianSpace(int JointNum, double *Slist, double *thetalist, double *Js)
+{
+	int i;
+	int j;
+	int k;
+	double T1[4][4];
+	double T2[4][4];
+	double se3mat[4][4];
+	double V[6];
+	double AdT[6][6];
+	double T[4][4] = {
+		1,0,0,0,
+		0,1,0,0,
+		0,0,1,0,
+		0,0,0,1
+	};
+	//Fist column of Js.
+	for (i = 0; i < 6; i++)
+	{
+		Js[i*JointNum + 0] = Slist[i*JointNum + 0];
+	}
+	//Jsi for i=2,3,...,n.
+	for (i = 1; i <JointNum; i++)
+	{
+		for (j = 0; j < 6; j++)
+		{
+			V[j] = Slist[j*JointNum + i - 1];
+		}
+		VecTose3(V, se3mat);
+		Matrix4MultValue(se3mat, thetalist[i - 1], se3mat);
+		MatrixExp6(se3mat, T1);
+		Matrix4Mult(T, T1, T2);
+		Matrix4Equal(T2, T);
+		Adjoint(T, AdT);
+		for (j = 0; j < 6; j++)
+		{
+			Js[j*JointNum + i] = 0;
+			for (k = 0; k < 6; k++)
+			{
+				Js[j*JointNum + i] = Js[j*JointNum + i] + AdT[j][k] * Slist[k*JointNum + i];
+			}
+		}
+	}
+	return;
+}
+```
 
 
 

@@ -39,7 +39,121 @@ $$
 - 一个是空间形式的: T = FKinSpace(M,Slist,thetalist) , 给定末端在初始构型M和螺旋轴Blist在固定坐标系的表达，以及关节变量thetalist，计算末端在固定坐标系的构型。
 - 一个是物体坐标系形式的: T = FKinBody(M,Blist,thetalist) , 给定末端在初始构型M和螺旋轴Blist在物体坐标系的表达，以及关节变量thetalist，计算末端在物体坐标系的构型。
 
-实现代码用到了上一篇博客的刚体运动算法，代码较长，就不放在这里了，源码放在github，[链接](https://github.com/libing403/LearningNotes/tree/master/Robotics/Modern%20Robotics%20Mechanics%20planning%20control)
+实现代码用到了上一篇博客的刚体运动算法，代码较长，就不放在这里了。下面只列出两个公式的实现代码。代码不断更新迭代，完整的最新源码放在github，[链接](https://github.com/libing403/LearningNotes/tree/master/Robotics/Modern%20Robotics%20Mechanics%20planning%20control)
+
+```c
+/**
+ * @brief			Description: Algorithm module of robotics, according to the
+ *					book[modern robotics : mechanics, planning, and control].
+ * @file:			RobotAlgorithmModule.c
+ * @author:			LiBing
+ * @date:			2019/03/01 12:23
+ * Copyright(c) 	2019 LiBing. All rights reserved. 
+ *					https://blog.csdn.net/libing403       
+ * Contact 			1540845930@qq.com
+ * @note:     
+ * @warning: 		
+*/
+
+#include "RobotAlgorithmModule.h"
+#include <math.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+/**
+*@brief			Description: Computes the end-effector frame given the zero position of the end-effector M,
+*				the list of joint screws Slist expressed in the fixed-space frame, and the list of joint values thetalist.
+*@param[in]		M			the zero position of the end-effector expressed in the fixed-space frame.
+*@param[in]		Joint		Num	the number of joints.
+*@param[in]		Slist		the list of joint screws Slist expressed in the fixed-space frame.
+*							in the format of a matrix with the screw axes as the column.
+*@param[in]		thetalist   the list of joint values.
+*@param[out]	T			the end-effector frame expressed in the fixed-space frame.
+*@return		No return value.
+*@note:			when Slist is a matrix ,make sure that columns number of Slist is equal to JointNum,
+*				rows number of Slist 6 .The function call should be written as
+*				FKinBody(...,(double *)Slist,...).
+*@waring:
+*/
+void FKinSpace(double M[4][4],int  JointNum,double *Slist, double *thetalist,double T[4][4])
+{
+	int i, j, k, l;
+	double se3mat[4][4];
+	double T2[4][4];
+	double exp6[4][4];
+	double V[6];
+	Matrix4Equal(M, T);
+	for (i= JointNum-1;i>=0;i--)
+	{
+		for (l=0;l<6;l++)
+		{
+			V[l] = Slist[l*JointNum+i];//get each column of Slist.
+		}
+		VecTose3(V, se3mat);
+		for (j=0;j<4;j++)
+		{
+			for (k=0;k<4;k++)
+			{
+				se3mat[j][k] = se3mat[j][k] * thetalist[i];
+			}
+		}
+		MatrixExp6(se3mat, exp6);
+		Matrix4Mult(exp6, T, T2);
+		Matrix4Equal(T2, T);
+	}
+	return ;
+}
+
+/**
+*@brief			Description:Computes the end-effector frame given the zero position of the end-effector M,
+*				the list of joint screws Blist expressed in the end-effector frame, and the list of joint values thetalist.
+*@param[in]		M			the zero position of the end-effector expressed in the end-effector frame.
+*@param[in]		JointNum	the number of joints.
+*@param[in]		Blist		the list of joint screws Slist expressed in the end-effector frame.
+*							in the format of a matrix with the screw axes as the column.
+*@param[in]		thetalist   the list of joint values.
+*@param[out]	T			the end-effector frame expressed in the end-effector frame.
+*@return		No return value.
+*@note:			when Blist is a matrix ,make sure that columns number of Slist is equal to JointNum,
+*				rows number of Slist 6 .The function call should be written as
+*				FKinBody(...,(double *)Blist,...).
+*@waring:
+*/
+void FKinBody(double M[4][4], int  JointNum, double *Blist, double thetalist[], double T[4][4])
+{
+	int i, j, k, l;
+	double se3mat[4][4];
+	double T2[4][4];
+	double exp6[4][4];
+	double V[6];
+	Matrix4Equal(M, T);
+	for (i = 0; i < JointNum ; i++)
+	{
+		for (l = 0; l < 6; l++)
+		{
+			V[l] = Blist[l*JointNum + i];//get each column of Slist.
+		}
+		VecTose3(V, se3mat);
+		for (j = 0; j < 4; j++)
+		{
+			for (k = 0; k < 4; k++)
+			{
+				se3mat[j][k] = se3mat[j][k] * thetalist[i];
+			}
+		}
+		MatrixExp6(se3mat, exp6);
+		Matrix4Mult(T, exp6, T2);
+		Matrix4Equal(T2, T);
+	}
+	return ;
+}
+```
+
+
+
+
+
+
 
 
 
