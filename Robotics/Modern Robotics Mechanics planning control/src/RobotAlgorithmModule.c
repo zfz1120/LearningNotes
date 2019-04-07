@@ -423,7 +423,131 @@ void MatrixMult(const double *a, int m, int n, const double *b, int l, double *c
 	return;
 }
 
+/**
+ * @brief 			Description: Algorithm for Computing the ZYX Euler Angles according to rotation matrix.
+ * @param[in]		R				Rotation matrix.
+ * @param[out]		alpha			Angles for rotation around Z axis.
+ * @param[out]		beta			Angles for rotation around Y axis.
+ * @param[out]		gamma			Angles for rotation around X axis.
+ * @return			No return value.
+ * @note:
+ * @waring:
+*/
+void RotToZYXEulerAngle(double R[3][3],double *alpha,double *beta,double *gamma)
+{
 
+	if (fabs(1.0+R[2][0])<ZERO_ELEMENT)
+	{
+		*alpha = 0;
+		*beta = PI / 2.0;
+		*gamma = atan2(R[0][1], R[1][1]);
+			
+	}
+	else if (fabs(1.0 - R[2][0])<ZERO_ELEMENT)
+	{
+		*alpha = 0;
+		*beta = -PI / 2.0;
+		*gamma = atan2(R[0][1], R[1][1]);
+	}
+	else
+	{
+
+		*alpha = atan2(R[1][0], R[0][0]);
+		*beta = atan2(-R[2][0], sqrt(R[0][0] * R[0][0] + R[1][0] * R[1][0]));
+		*gamma = atan2(R[2][1], R[2][2]);
+	}
+	return;
+
+}
+
+/**
+* @brief 			Description: Algorithm for Computing the rotation matrix of ZYX Euler Angles.
+* @param[in]		alpha			Angles for rotation around Z axis.
+* @param[in]		beta			Angles for rotation around Y axis.
+* @param[in]		gamma			Angles for rotation around X axis.
+* @param[out]		R				Rotation matrix.
+* @return			No return value.
+* @note:
+* @waring:
+*/
+void ZYXEulerAngleToRot(double alpha, double beta, double gamma, double R[3][3])
+{
+	R[0][0] = cos(alpha)*cos(beta);
+	R[0][1] = cos(alpha)*sin(beta)*sin(gamma) - sin(alpha)*cos(gamma);
+	R[0][2] = cos(alpha)*sin(beta)*cos(gamma) + sin(alpha)*sin(gamma);
+	R[1][0] = sin(alpha)*cos(beta);
+	R[1][1] = sin(alpha)*sin(beta)*sin(gamma) + cos(alpha)*cos(gamma);
+	R[1][2] = sin(alpha)*sin(beta)*cos(gamma) - cos(alpha)*sin(gamma);
+	R[2][0] = -sin(beta);
+	R[2][1] = cos(beta)*sin(gamma);
+	R[2][2] = cos(beta)*cos(gamma);
+	return;
+}
+
+
+
+
+/**
+* @brief 			Description: Algorithm for Computing the roll-pitch-yaw angles(rotate around fix reference X,Y,Z axis).
+* @param[in]		R				Rotation matrix.
+* @param[out]		roll			Angles for rotate around fix reference X axis.
+* @param[out]		pitch			Angles for rotate around fix reference Y axis.
+* @param[out]		yaw				Angles for rotate around fix reference Z axis.
+* @return			No return value.
+* @note:
+* @waring:
+*/
+void RotToRPY(double R[3][3],double *roll,double *pitch,double *yaw)
+{
+	if (fabs(1.0 + R[2][0]) < ZERO_ELEMENT)
+	{
+		*yaw = 0;
+		*pitch = PI / 2.0;
+		*roll = atan2(R[0][1], R[1][1]);
+
+	}
+	else if (fabs(1.0 - R[2][0]) < ZERO_ELEMENT)
+	{
+		*yaw = 0;
+		*pitch = -PI / 2.0;
+		*roll = atan2(R[0][1], R[1][1]);
+	}
+	else
+	{
+
+		*yaw = atan2(R[1][0], R[0][0]);
+		*pitch = atan2(-R[2][0], sqrt(R[0][0] * R[0][0] + R[1][0] * R[1][0]));
+		*roll = atan2(R[2][1], R[2][2]);
+	}
+	return;
+}
+
+/**
+* @brief 			Description: Algorithm for Computing the rotation matrix of the roll-pitch-yaw angles.
+* @param[in]		roll			Angles for rotate around fix reference X axis.
+* @param[in]		pitch			Angles for rotate around fix reference Y axis.
+* @param[in]		yaw				Angles for rotate around fix reference Z axis.
+* @param[out]		R				Rotation matrix.
+* @return			No return value.
+* @note:
+* @waring:
+*/
+void RPYToRot(double roll, double pitch, double yaw, double R[3][3])
+{
+	double alpha = yaw;
+	double beta = pitch;
+	double gamma = roll;
+	R[0][0] = cos(alpha)*cos(beta);
+	R[0][1] = cos(alpha)*sin(beta)*sin(gamma) - sin(alpha)*cos(gamma);
+	R[0][2] = cos(alpha)*sin(beta)*cos(gamma) + sin(alpha)*sin(gamma);
+	R[1][0] = sin(alpha)*cos(beta);
+	R[1][1] = sin(alpha)*sin(beta)*sin(gamma) + cos(alpha)*cos(gamma);
+	R[1][2] = sin(alpha)*sin(beta)*cos(gamma) - cos(alpha)*sin(gamma);
+	R[2][0] = -sin(beta);
+	R[2][1] = cos(beta)*sin(gamma);
+	R[2][2] = cos(beta)*cos(gamma);
+	return;
+}
 
 /**
 *@brief			Computes the inverse of the rotation matrix R.
@@ -493,7 +617,7 @@ void AxisAng3(double expc3[3],double omghat[3],double *theta)
 	int i;
 	int ret = 0;
 	*theta = sqrt(expc3[0] * expc3[0] + expc3[1] * expc3[1] + expc3[2] * expc3[2]);
-	if (*theta<ZERO_VALUE)
+	if (*theta<ZERO_ANGLE)
 	{
 		omghat[0] = 0.0;
 		omghat[1] = 0.0;
@@ -533,7 +657,7 @@ void MatrixExp3(double so3Mat[3][3],double R[3][3])
 	};
 	so3ToVec(so3Mat, omgtheta);
 	AxisAng3(omgtheta, omghat, &theta);
-	if (theta<ZERO_VALUE)
+	if (theta<ZERO_ANGLE)
 	{
 		Matrix3Equal(MatI3, R);
 		return ;
@@ -575,13 +699,13 @@ void MatrixLog3(double R[3][3],double so3Mat[3][3])
 	}
 	else if (acosinput<=-1.0)
 	{
-		if ((1.0+R[2][2])>= ZERO_VALUE)
+		if ((1.0+R[2][2])>= ZERO_ELEMENT)
 		{
 			omg[0] = 1.0 / sqrt(2 * (1.0 + R[2][2]))*R[0][2];
 			omg[1] = 1.0 / sqrt(2 * (1.0 + R[2][2]))*R[1][2];
 			omg[2] = 1.0 / sqrt(2 * (1.0 + R[2][2]))*(1.0 + R[2][2]);
 		}
-		else if ((1.0+R[1][1]>=ZERO_VALUE))
+		else if ((1.0+R[1][1]>=ZERO_ELEMENT))
 		{
 			omg[0] = 1.0 / sqrt(2 * (1.0 + R[1][1]))*R[0][1];
 			omg[1] = 1.0 / sqrt(2 * (1.0 + R[1][1]))*(1.0 + R[1][1]);
@@ -844,10 +968,10 @@ theta from the 6-vector of exponential coordinates S*theta.
 void AxisAng6(double expc6[6],double S[6],double *theta)
 {
 	*theta = Vec3Norm(expc6);
-	if (*theta<ZERO_VALUE)
+	if (*theta<ZERO_ANGLE)
 	{
 		*theta = Vec3Norm(&expc6[3]);
-		if (*theta<ZERO_VALUE)
+		if (*theta<ZERO_DISTANCE)
 		{
 			*theta=0.0;
 			//S is undefine,no motion at all.
@@ -890,7 +1014,7 @@ void MatrixExp6(double se3Mat[4][4], double T[4][4])
 	};
 	TransToRp(se3Mat, so3mat, p);//extracts so3mat from se3mat
 	so3ToVec(so3mat, omgtheta);
-	if (Vec3Norm(omgtheta)<ZERO_VALUE)
+	if (Vec3Norm(omgtheta)<ZERO_ANGLE)
 	{
 		for (i=0;i<3;i++)
 		{
@@ -964,7 +1088,7 @@ void MatrixLog6(double T[4][4], double se3Mat[4][4])
 	{
 		for (j=0;j<3;j++)
 		{
-			if (fabs(so3mat[i][j])<ZERO_VALUE)
+			if (fabs(so3mat[i][j])<ZERO_ELEMENT)
 			{
 				continue;
 			}

@@ -18,7 +18,10 @@ extern "C" {
 
 	#define			PI					3.14159265358979323846
 	//if the norm of vector is near zero(< 1.0E-6),regard as zero.
-	#define			ZERO_VALUE			1.0E-6		
+	#define			ZERO_VECTOR			1.0E-6	
+	#define			ZERO_ELEMENT		1.0E-6		
+	#define			ZERO_ANGLE			1.0E-6
+	#define			ZERO_DISTANCE		1.0E-6
 
 	/**
 	*@brief			Description:use GrublersFormula calculate The number of degrees of
@@ -35,6 +38,56 @@ extern "C" {
 	*@waring:
 	*/
 	int GrublersFormula(int m, int N,  int J, int *f);
+
+	/**
+	* @brief 			Description: Algorithm for Computing the ZYX Euler Angles according to rotation matrix.
+	* @param[in]		R				Rotation matrix.
+	* @param[out]		alpha			Angles for rotation around Z axis.
+	* @param[out]		beta			Angles for rotation around Y axis.
+	* @param[out]		gamma			Angles for rotation around X axis.
+	* @return			No return value.
+	* @note:
+	* @waring:
+	*/
+	void RotToZYXEulerAngle(double R[3][3], double *alpha, double *beta, double *gamma);
+
+
+	/**
+	* @brief 			Description: Algorithm for Computing the rotation matrix of ZYX Euler Angles.
+	* @param[in]		alpha			Angles for rotation around Z axis.
+	* @param[in]		beta			Angles for rotation around Y axis.
+	* @param[in]		gamma			Angles for rotation around X axis.
+	* @param[out]		R				Rotation matrix.
+	* @return			No return value.
+	* @note:
+	* @waring:
+	*/
+	void ZYXEulerAngleToRot(double alpha, double beta, double gamma, double R[3][3]);
+
+
+	/**
+	* @brief 			Description: Algorithm for Computing the roll-pitch-yaw angles(rotate around fix reference X,Y,Z axis).
+	* @param[in]		R				Rotation matrix.
+	* @param[out]		roll			Angles for rotate around fix reference X axis.
+	* @param[out]		pitch			Angles for rotate around fix reference Y axis.
+	* @param[out]		yaw				Angles for rotate around fix reference Z axis.
+	* @return			No return value.
+	* @note:
+	* @waring:
+	*/
+	void RotToRPY(double R[3][3], double *roll, double *pitch, double *yaw);
+
+	/**
+	* @brief 			Description: Algorithm for Computing the rotation matrix of the roll-pitch-yaw angles.
+	* @param[in]		roll			Angles for rotate around fix reference X axis.
+	* @param[in]		pitch			Angles for rotate around fix reference Y axis.
+	* @param[in]		yaw				Angles for rotate around fix reference Z axis.
+	* @param[out]		R				Rotation matrix.
+	* @return			No return value.
+	* @note:
+	* @waring:
+	*/
+	void RPYToRot(double roll, double pitch, double yaw, double R[3][3]);
 
 	/**
 	*@brief			Computes the inverse of the rotation matrix R.
