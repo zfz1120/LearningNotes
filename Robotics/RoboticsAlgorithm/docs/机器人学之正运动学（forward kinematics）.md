@@ -39,7 +39,7 @@ $$
 - 一个是空间形式的: T = FKinSpace(M,Slist,thetalist) , 给定末端在初始构型M和螺旋轴Blist在固定坐标系的表达，以及关节变量thetalist，计算末端在固定坐标系的构型。
 - 一个是物体坐标系形式的: T = FKinBody(M,Blist,thetalist) , 给定末端在初始构型M和螺旋轴Blist在物体坐标系的表达，以及关节变量thetalist，计算末端在物体坐标系的构型。
 
-实现代码用到了上一篇博客的刚体运动算法，代码较长，就不放在这里了。下面只列出两个公式的实现代码。代码不断更新迭代，完整的最新源码放在github，[链接](https://github.com/libing403/LearningNotes/tree/master/Robotics/Modern%20Robotics%20Mechanics%20planning%20control)
+实现代码用到了上一篇博客的刚体运动算法，代码较长，就不放在这里了。下面只列出两个公式的实现代码。代码不断更新迭代，完整的最新源码放在github--[链接](https://github.com/libing403/LearningNotes/tree/master/Robotics/RoboticsAlgorithm)
 
 ```c
 /**

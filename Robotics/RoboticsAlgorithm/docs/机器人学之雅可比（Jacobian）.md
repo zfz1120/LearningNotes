@@ -196,7 +196,7 @@ $$
 注意到，我们不需要对正运动学模型进行微分，就可以直接获得整个雅可比。
 
 ## 算法实现（C语言）
-基于指数坐标计算雅可比的算法，我已用C语言实现，包括两个函数JacobianBody和JacobianSpace 。下面只列出这两个函数的实现。代码不断更新迭代，完整的最新源码参见github--[链接](https://github.com/libing403/LearningNotes/tree/master/Robotics/Modern%20Robotics%20Mechanics%20planning%20control)
+基于指数坐标计算雅可比的算法，我已用C语言实现，包括两个函数JacobianBody和JacobianSpace 。下面只列出这两个函数的实现。代码不断更新迭代，完整的最新源码参见github--[链接](https://github.com/libing403/LearningNotes/tree/master/Robotics/RoboticsAlgorithm)
 
 ```c
 /**

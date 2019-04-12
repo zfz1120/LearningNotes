@@ -6,7 +6,7 @@
 
 ##前言
 
-这半个月的业余时间研究了机器人逆运动学的解析解法和迭代数值解法，并用程序实现。由于解析法只适合于特定结构的机器人，不具有通用性，因此这里不讨论解析解，只讨论迭代数值解法。本文相关的程序及研究素材都可以从github下载--[链接](https://github.com/libing403/LearningNotes/tree/master/Robotics/Modern%20Robotics%20Mechanics%20planning%20control) 。
+这半个月的业余时间研究了机器人逆运动学的解析解法和迭代数值解法，并用程序实现。由于解析法只适合于特定结构的机器人，不具有通用性，因此这里不讨论解析解，只讨论迭代数值解法。本文相关的程序及研究素材都可以从github下载--[链接](https://github.com/libing403/LearningNotes/tree/master/Robotics/RoboticsAlgorithm) 。
 
 ##数值逆运动学
 
@@ -861,7 +861,7 @@ ans =
 
 ## 一般机器人逆运动学数值解法实现
 
-有了前面实现的计算伪逆的算法，那么接下来就可以基于旋量理论和牛顿拉普算法，实现一般机器人逆运动学数值解法。基于前面数值逆运动算法的分析，下面使用C语言实现，主要有两个函数，其中的依赖函数可以在以前的博客找到。代码不断更新迭代，完整的最新源码参见github--[链接](https://github.com/libing403/LearningNotes/tree/master/Robotics/Modern%20Robotics%20Mechanics%20planning%20control) 。
+有了前面实现的计算伪逆的算法，那么接下来就可以基于旋量理论和牛顿拉普算法，实现一般机器人逆运动学数值解法。基于前面数值逆运动算法的分析，下面使用C语言实现，主要有两个函数，其中的依赖函数可以在以前的博客找到。代码不断更新迭代，完整的最新源码参见github--[链接](https://github.com/libing403/LearningNotes/tree/master/Robotics/RoboticsAlgorithm) 。
 
 - IKinBodyNR(JointNum, (double *)Blist, M, T, thetalist0, eomg, ev, maxiter, thetalist);
 - IKinSpaceNR(JointNum, (double *)Slist, M, T, thetalist0, eomg, ev, maxiter, thetalist);

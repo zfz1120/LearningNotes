@@ -4,7 +4,7 @@
 
 ##摘要
 
-在上一篇博客[ 刚体运动的矩阵表示和指数坐标表示](https://blog.csdn.net/libing403/article/details/88322800)总结了刚体运动的矩阵表示和指数坐标表示，介绍了它们之间的联系和相互转换的。这些算法在教材《 Modern Robotics Mechanics,Planning , and Control》给出了Matlab和python语言的实现。我在这里再给出这些算法的C语言实现。**欢迎反馈存在的bug。**
+在上一篇博客 刚体运动的矩阵表示和指数坐标表示总结了刚体运动的矩阵表示和指数坐标表示，介绍了它们之间的联系和相互转换的。这些算法在教材《 Modern Robotics Mechanics,Planning , and Control》给出了Matlab和python语言的实现。我在这里再给出这些算法的C语言实现。欢迎反馈存在的bug。 源码不断更新完善，最新代码可从gihub 下载–[链接](https://github.com/libing403/LearningNotes/tree/master/Robotics/RoboticsAlgorithm)
 
 ##头文件
 
