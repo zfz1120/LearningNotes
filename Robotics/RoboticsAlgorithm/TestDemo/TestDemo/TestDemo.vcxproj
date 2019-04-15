@@ -134,10 +134,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\RobotAlgorithmModule.h" />
+    <ClInclude Include="..\..\src\TestDemo.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\RobotAlgorithmModule.c" />
     <ClCompile Include="..\..\src\TestDemo.c" />
+    <ClCompile Include="..\..\src\TestMain.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -10,44 +10,9 @@
  * @warning: 		
 */
 
-
 #include <stdio.h>
 #include <math.h>
 #include "RobotAlgorithmModule.h"
-#define M_PI  3.14159265358979323846
-void test_GrublersFormula();
-void test_RotInv();
-void test_VecToso3();
-void test_so3ToVec();
-void test_AxisAng3();
-void test_MatrixExp3();
-void test_MatrixLog3();
-void test_RpToTrans();
-void test_TransToRp();
-void test_TransInv();
-void test_VecTose3();
-void test_se3ToVec();
-void test_Adjoint();
-void test_AxisAng6();
-void test_MatrixExp6();
-void test_MatrixLog6();
-void test_FKinSpace();
-void test_FKinBody();
-void test_JacobianBody();
-void test_JacobianSpace();
-void test_MatrixCopy();
-void test_svdcmp();
-void test_MatrixT();
-void test_MatrixMult();
-void test_MatrixPinv();
-void test_IKinBodyNR();
-void test_IKinSpaceNR();
-void test_IKOnUR3();
-int main()
-{
-	test_IKOnUR3();
-	return 0;
-}
 
 void test_GrublersFormula()
 {
@@ -782,8 +747,8 @@ void test_IKOnUR3()
 	};
 	double T[4][4] = {
 		1.0000,        0 ,        0,   10.0000,
-		0,   0.0000,    1.0000,  375.0000,
-		0, -1.0000 ,   0.0000 , 200.0000,
+		0,   0,    1,  375.0000,
+		0,  -1 ,   0 , 200.0000,
 		0,         0 ,        0 ,   1.0000
 	};
 	double thetalist0[6] = { 0,0,0,0,0,0 };
@@ -804,5 +769,255 @@ void test_IKOnUR3()
 		printf("%lf, ",thetalist[i]);
 	}
 	printf("\n\n");
+	return;
+}
+
+void test_RotToAxisAng()
+{
+	//绕z轴旋转30度的旋转矩阵.
+	double R[3][3] =
+	{
+		cos(PI / 6.0),-sin(PI / 6.0),0,
+		sin(PI / 6.0),cos(PI / 6.0),0,
+		0,0,1
+	};
+	double omg[3];
+	double theta;
+	RotToAxisAng(R, omg, &theta);
+	printf("omg:\n%lf\n%lf\n%lf\n", omg[0], omg[1], omg[2]);
+	printf("theta:\n%lf\n", theta);
+	return;
+}
+
+void test_AxisAngToQuaternion()
+{
+	double R[3][3] = { 0 };
+	//绕z轴旋转30度的欧拉轴和角度.
+	double omg[3] = {0,0,1};
+	double theta = PI / 6.0;
+	double q[4];
+	AxisAngToQuaternion(omg, theta, q);
+	printf("q:\n%lf\n%lf\n%lf\n%lf\n", q[0], q[1], q[2], q[3]);
+	return;
+}
+
+void test_QuaternionToRot()
+{
+	double theta = PI / 6;
+	//绕z轴旋转30度的四元数.
+	double q[4] = { cos(theta / 2),0 * sin(theta / 2),0 * sin(theta / 2),1.0*sin(theta / 2) };
+	double R[3][3];
+	QuaternionToRot(q, R);
+	int i;
+	printf("R:\n");
+	for (i=0;i<3;i++)
+	{
+		printf("%lf %lf %lf\n", R[i][0], R[i][1], R[i][2]);
+	}
+	return;
+}
+
+void test_RotToQuaternion()
+{
+	//绕z轴旋转30度的旋转矩阵.
+	double R[3][3] =
+	{
+		cos(PI / 6.0),-sin(PI / 6.0),0,
+		sin(PI / 6.0),cos(PI / 6.0),0,
+		0,0,1
+	};
+	double q[4];
+	RotToQuaternion(R, q);
+	int i;
+	printf("q:\n");
+	for (i=0;i<4;i++)
+	{
+		printf("%lf\n", q[i]);
+	}
+	return;
+}
+
+
+void test_InitialOrientInpParam()
+{
+	double Rs[3][3] =
+	{
+		cos(PI / 6.0),-sin(PI / 6.0),0,
+		sin(PI / 6.0),cos(PI / 6.0),0,
+		0,0,1
+	};
+	double Re[3][3] =
+	{
+		cos(PI / 3.0),-sin(PI / 3.0),0,
+		sin(PI / 3.0),cos(PI / 3.0),0,
+		0,0,1
+	};
+	OrientInpParam p;
+	InitialOrientInpParam(Rs, Re, &p);
+	int i;
+	printf("OrientInpParam Rs:\n");
+	for (i = 0; i < 3; i++)
+	{
+		printf("%lf %lf %lf\n", p.Rs[i][0], p.Rs[i][1], p.Rs[i][2]);
+	}
+	printf("OrientInpParam Re:\n");
+	for (i = 0; i < 3; i++)
+	{
+		printf("%lf %lf %lf\n", p.Re[i][0], p.Re[i][1], p.Re[i][2]);
+	}
+	printf("OrientInpParam R:\n");
+	for (i = 0; i < 3; i++)
+	{
+		printf("%lf %lf %lf\n", p.R[i][0], p.R[i][1], p.R[i][2]);
+	}
+	printf("OrientInpParam omg:\n");
+	printf("%lf %lf %lf\n", p.omg[0], p.omg[1], p.omg[2]);
+
+	printf("OrientInpParam theta:\n");
+	printf("%lf\n", p.theta);
+	printf("OrientInpParam thetai:\n");
+	printf("%lf\n", p.thetai);
+
+	printf("OrientInpParam Ri:\n");
+	for (i = 0; i < 3; i++)
+	{
+		printf("%lf %lf %lf\n", p.Ri[i][0], p.Ri[i][1], p.Ri[i][2]);
+	}
+
+	return;
+
+}
+
+void test_QuaternionOrientInp()
+{
+	double Rs[3][3] =
+	{
+		cos(PI / 6.0),-sin(PI / 6.0),0,
+		sin(PI / 6.0),cos(PI / 6.0),0,
+		0,0,1
+	};
+	double Re[3][3] =
+	{
+		cos(PI / 3.0),-sin(PI / 3.0),0,
+		sin(PI / 3.0),cos(PI / 3.0),0,
+		0,0,1
+	};
+	OrientInpParam p;
+	double Ri[3][3];
+	MatrixCopy((double *)Rs, 3, 3, (double *)Ri);
+	InitialOrientInpParam(Rs, Re, &p);
+	double dtheta = 0.01;
+	int k = 0;
+	printf("Orientation Ri:k=%d\n",k);
+	int i;
+	for (i = 0; i < 3; i++)
+	{
+		printf("%lf %lf %lf\n", Ri[i][0], Ri[i][1], Ri[i][2]);
+	}
+	//Orientation interpolation
+	while (p.InpFlag !=3 && p.InpFlag!=0)
+	{
+		k++;
+		QuaternionOrientInp(&p, dtheta, Ri);
+		printf("Orientation Ri:k=%d\n",k);
+		for (i = 0; i < 3; i++)
+		{
+			printf("%lf %lf %lf\n", Ri[i][0], Ri[i][1], Ri[i][2]);
+		}
+	}
+	return;
+}
+
+void test_InitialLinePathParam()
+{
+	double p1[3] = { 0,0,0 };
+	double p2[3] = { 1,2,3 };
+	double dL = 0.05;
+	LineInpParam p;
+	InitialLinePathParam( p1, p2, &p);
+	printf("LinePathParam p1;\n");
+	printf("%lf\n%lf\n%lf\n", p.p1[0], p.p1[1], p.p1[2]);
+	printf("LinePathParam p2;\n");
+	printf("%lf\n%lf\n%lf\n", p.p2[0], p.p2[1], p.p2[2]);
+	printf("LinePathParam L;\n%lf\n",p.L);
+	printf("LinePathParam Li;\n%lf\n", p.Li);
+	printf("LinePathParam pi;\n");
+	printf("%lf\n%lf\n%lf\n", p.pi[0], p.pi[1], p.pi[2]);
+	printf("LinePathParam InpFlag;\n%d\n",p.InpFlag);
+
+	return;
+}
+
+
+void test_LinePathInp()
+{
+	double p1[3] = { 0,0,0 };
+	double p2[3] = { 1,2,3 };
+	LineInpParam p;
+	double pi[3] = {p1[0],p1[2],p1[2]};
+	InitialLinePathParam( p1, p2, &p);
+	double dL = 0.05;
+	int k = 0;
+	printf("LinePathInp pi: k=%d,%lf %lf %lf\n", k,pi[0], pi[1], pi[2]);
+	while (p.InpFlag !=3 && p.InpFlag != 0)
+	{
+		k++;
+		LinePathInp(&p, dL, pi);
+		printf("LinePathInp pi: k=%d,%lf %lf %lf\n",k, pi[0], pi[1], pi[2]);
+	}
+	return;
+}
+
+void test_LinePOInp()
+{
+	//double p1[6] = { 213.0,267.8,478.95,0,0,0 };
+	//double p2[6] = { 10,425,200, -PI / 2,0 ,0 };
+	//double p1[6] = { 10,425,200, -PI / 2,0 ,0 };
+	//double p2[6] = { -10,525,200,-PI / 4,0,-PI / 6 };
+	double p1[6] = { 10,425,200, -PI / 2,0 ,0 };
+	double p2[6] = { 10,425,200, -PI *3/ 4,0 ,PI / 2 };
+	double Ti[4][4];
+	double dL = 1;
+	FILE *fp1;
+	int ret = fopen_s(&fp1, "LineTrajactory.txt","w");
+	if (ret)
+	{
+		printf("fopen_s error %d\n", ret);
+	}
+	LinePOParam pt;
+	InitialLinePOInpParam(p1, p2, &pt);
+	//double dtheta =pt.Orient.theta/(pt.Line.L / dL);
+	double dtheta = PI / 100;
+	int JointNum = 6;
+	double Slist[6][6] = {
+		0 ,        0,         0,         0 ,        0,         0,
+		0 ,   1.0000 ,   1.0000 ,   1.0000,         0,    1.0000,
+		1.0000,         0 ,        0 ,        0 ,   1.0000,         0,
+		0, -151.9000, -395.5500, -395.5500 , 110.4000 ,-478.9500,
+		0 ,        0 ,        0  ,       0 ,-213.0000,         0,
+		0  ,       0 ,        0,  213.0000 ,        0,  213.0000
+	};
+	double M[4][4] =
+	{
+		1.0000 ,        0,         0,  213.0000,
+		0 ,   1.0000 ,        0,  267.8000,
+		0 ,        0 ,   1.0000,  478.9500,
+		0 ,        0  ,       0,    1.0000,
+	};
+	//double thetalist0[6] = { 0 };
+	double thetalist0[6] = { 1.284569 ,0.488521, - 0.443200, 1.525477, - 1.570797, - 0.286227 };
+
+	double thetalist[6];
+	double eomg = 0.001;
+	double ev = 0.01;
+	while (pt.InpFlag!=3)
+	{
+		LinePOInp(&pt, dL, dtheta, Ti);
+		IKinSpaceNR(JointNum,(double *)Slist, M, Ti, thetalist0,eomg,ev,10,thetalist);
+		//MatrixCopy((double *)Ti, 4, 4, (double *)M);
+		MatrixCopy(thetalist, 6, 1, thetalist0);
+		fprintf(fp1, "%lf %lf %lf %lf %lf %lf\n", thetalist[0], thetalist[1], thetalist[2], thetalist[3], thetalist[4], thetalist[5]);
+	}
+	fclose(fp1);
 	return;
 }

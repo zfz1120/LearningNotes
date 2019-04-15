@@ -8,7 +8,7 @@
  *					https://blog.csdn.net/libing403   
  * Contact 			1540845930@qq.com
  * @note:     
- * @warning: 		
+ *@warning:
 */
 
 #include "RobotAlgorithmModule.h"
@@ -29,7 +29,7 @@
 *@note:					This formula holds only if all joint constraints are independent.
 *						If they are not independent then the formula provides a lower 
 *						bound on the number of degrees of freedom.
-*@waring:
+*@warning:
 */
 int GrublersFormula(int m, int N, int J, int *f)
 {
@@ -50,7 +50,7 @@ int GrublersFormula(int m, int N, int J, int *f)
 *@param[out]		b		result,b=a.
 *@return		No return value.
 *@note:
-*@waring:
+*@warning:
 */
 void Matrix3Equal(double a[][3], double b[][3])
 {
@@ -72,7 +72,7 @@ void Matrix3Equal(double a[][3], double b[][3])
 *@param[out]		b		result,b=a.
 *@return		No return value.
 *@note:
-*@waring:
+*@warning:
 */
 void Matrix4Equal(double a[][4], double b[][4])
 {
@@ -96,7 +96,7 @@ void Matrix4Equal(double a[][4], double b[][4])
 *@param[out]	c		result of a+b.
 *@return		No return value.
 *@note:
-*@waring:
+*@warning:
 */
 void Matrix3Add(double a[][3], double b[][3], double c[][3])
 {
@@ -119,7 +119,7 @@ void Matrix3Add(double a[][3], double b[][3], double c[][3])
 *@param[out]	c		result of a-b.
 *@return		No return value.
 *@note:
-*@waring:
+*@warning:
 */
 void Matrix3Sub(double a[][3], double b[][3], double c[][3])
 {
@@ -142,7 +142,7 @@ void Matrix3Sub(double a[][3], double b[][3], double c[][3])
 *@param[out]	c		result of a*b.
 *@return		No return value.
 *@note:
-*@waring:
+*@warning:
 */
 void Matrix3Mult(double a[][3],double b[][3],double c[][3])
 {
@@ -171,7 +171,7 @@ void Matrix3Mult(double a[][3],double b[][3],double c[][3])
 *@param[out]	c		result of a*b.
 *@return		No return value.
 *@note:
-*@waring:
+*@warning:
 */
 void Matrix4Mult(double a[][4], double b[][4], double c[][4])
 {
@@ -201,7 +201,7 @@ void Matrix4Mult(double a[][4], double b[][4], double c[][4])
 *@param[out]	c		result of a*Value.
 *@return		No return value.
 *@note:
-*@waring:
+*@warning:
 */
 void Matrix3MultValue(double a[][3], double Value, double c[][3])
 {
@@ -224,7 +224,7 @@ void Matrix3MultValue(double a[][3], double Value, double c[][3])
 *@param[out]	c		result of a*Value.
 *@return		No return value.
 *@note:
-*@waring:
+*@warning:
 */
 void Matrix4MultValue(double a[][4], double Value, double c[][4])
 {
@@ -248,7 +248,7 @@ void Matrix4MultValue(double a[][4], double Value, double c[][4])
 *@param[out]	vec2		the output result of 3-vector.
 *@return		No return value.
 *@note:
-*@waring:
+*@warning:
 */
 void Matrix3MultVec(double R[3][3], double vec1[3], double vec2[3])
 {
@@ -272,7 +272,7 @@ void Matrix3MultVec(double R[3][3], double vec1[3], double vec2[3])
 *@param[out]	vec3		result of vec1 + vec2;
 *@return		No return value.
 *@note:
-*@waring:
+*@warning:
 */
 void Vec3Add(double vec1[3], double vec2[3], double vec3[3])
 {
@@ -290,7 +290,7 @@ void Vec3Add(double vec1[3], double vec2[3], double vec3[3])
 *@param[out]	vec3		result of vec1 cross product vec2.
 *@return		No return value.
 *@note:
-*@waring:
+*@warning:
 */
 void Vec3Cross(double vec1[3],double vec2[3],double vec3[3])
 {
@@ -307,7 +307,7 @@ void Vec3Cross(double vec1[3],double vec2[3],double vec3[3])
 *@param[out]	vec2			result of vec1 * value. 
 *@return		No return value.
 *@note:
-*@waring:
+*@warning:
 */
 void Vec3MultValue(double vec1[3], double value, double vec2[3])
 {
@@ -322,9 +322,9 @@ void Vec3MultValue(double vec1[3], double value, double vec2[3])
 *@param[in]		vec			an input 3-vector.
 *@return		the norm of a an input 3-vector.
 *@note:
-*@waring:
+*@warning:
 */
-double Vec3Norm(double vec[3])
+double Vec3Norm2(double vec[3])
 {
 	return sqrt(vec[0] * vec[0] + vec[1] * vec[1] + vec[2] * vec[2]);
 }
@@ -335,7 +335,7 @@ double Vec3Norm(double vec[3])
 *@param[in]		vec			an input n-vector.
 *@return		the norm of a an input 3-vector.
 *@note:
-*@waring:
+*@warning:
 */
 double VecNorm2(int n,double *vec)
 {
@@ -361,7 +361,7 @@ double VecNorm2(int n,double *vec)
 *@param[in]		b		Second matrix.
 *@return		No return value.
 *@note:
-*@waring:
+*@warning:
 */
 void MatrixCopy(const double *a, int m, int n, double *b)
 {
@@ -423,69 +423,6 @@ void MatrixMult(const double *a, int m, int n, const double *b, int l, double *c
 	return;
 }
 
-/**
- * @brief 			Description: Algorithm for Computing the ZYX Euler Angles according to rotation matrix.
- * @param[in]		R				Rotation matrix.
- * @param[out]		alpha			Angles for rotation around Z axis.
- * @param[out]		beta			Angles for rotation around Y axis.
- * @param[out]		gamma			Angles for rotation around X axis.
- * @return			No return value.
- * @note:
- * @waring:
-*/
-void RotToZYXEulerAngle(double R[3][3],double *alpha,double *beta,double *gamma)
-{
-
-	if (fabs(1.0+R[2][0])<ZERO_ELEMENT)
-	{
-		*alpha = 0;
-		*beta = PI / 2.0;
-		*gamma = atan2(R[0][1], R[1][1]);
-			
-	}
-	else if (fabs(1.0 - R[2][0])<ZERO_ELEMENT)
-	{
-		*alpha = 0;
-		*beta = -PI / 2.0;
-		*gamma = atan2(R[0][1], R[1][1]);
-	}
-	else
-	{
-
-		*alpha = atan2(R[1][0], R[0][0]);
-		*beta = atan2(-R[2][0], sqrt(R[0][0] * R[0][0] + R[1][0] * R[1][0]));
-		*gamma = atan2(R[2][1], R[2][2]);
-	}
-	return;
-
-}
-
-/**
-* @brief 			Description: Algorithm for Computing the rotation matrix of ZYX Euler Angles.
-* @param[in]		alpha			Angles for rotation around Z axis.
-* @param[in]		beta			Angles for rotation around Y axis.
-* @param[in]		gamma			Angles for rotation around X axis.
-* @param[out]		R				Rotation matrix.
-* @return			No return value.
-* @note:
-* @waring:
-*/
-void ZYXEulerAngleToRot(double alpha, double beta, double gamma, double R[3][3])
-{
-	R[0][0] = cos(alpha)*cos(beta);
-	R[0][1] = cos(alpha)*sin(beta)*sin(gamma) - sin(alpha)*cos(gamma);
-	R[0][2] = cos(alpha)*sin(beta)*cos(gamma) + sin(alpha)*sin(gamma);
-	R[1][0] = sin(alpha)*cos(beta);
-	R[1][1] = sin(alpha)*sin(beta)*sin(gamma) + cos(alpha)*cos(gamma);
-	R[1][2] = sin(alpha)*sin(beta)*cos(gamma) - cos(alpha)*sin(gamma);
-	R[2][0] = -sin(beta);
-	R[2][1] = cos(beta)*sin(gamma);
-	R[2][2] = cos(beta)*cos(gamma);
-	return;
-}
-
-
-
 
 /**
 * @brief 			Description: Algorithm for Computing the roll-pitch-yaw angles(rotate around fix reference X,Y,Z axis).
@@ -495,7 +432,7 @@ void ZYXEulerAngleToRot(double alpha, double beta, double gamma, double R[3][3])
 * @param[out]		yaw				Angles for rotate around fix reference Z axis.
 * @return			No return value.
 * @note:
-* @waring:
+*@warning:
 */
 void RotToRPY(double R[3][3],double *roll,double *pitch,double *yaw)
 {
@@ -530,7 +467,7 @@ void RotToRPY(double R[3][3],double *roll,double *pitch,double *yaw)
 * @param[out]		R				Rotation matrix.
 * @return			No return value.
 * @note:
-* @waring:
+*@warning:
 */
 void RPYToRot(double roll, double pitch, double yaw, double R[3][3])
 {
@@ -554,7 +491,7 @@ void RPYToRot(double roll, double pitch, double yaw, double R[3][3])
 *@param[in]		R		rotation matrix .
 *@param[out]	InvR	inverse matrix of R.
 *@return		No return value.
-*@note					Input R must be a 3 x 3 rotation matrix.
+*@note			Input R must be a 3 x 3 rotation matrix.
 */
 void RotInv(double R[3][3], double InvR[3][3])
 {
@@ -576,7 +513,7 @@ void RotInv(double R[3][3], double InvR[3][3])
 *@param[out]	so3Mat	the 3 x 3 skew-symmetric matrix corresponding to omg.
 *@return		No return value.
 *@note:
-*@waring:
+*@warning:
 */
 void VecToso3(double omg[3],double so3Mat[3][3])
 {
@@ -593,7 +530,7 @@ void VecToso3(double omg[3],double so3Mat[3][3])
 *@param[out]	omg			the 3-vector.
 *@return		No return value.
 *@note:
-*@waring:
+*@warning:
 */
 void so3ToVec(double so3Mat[3][3], double omg[3])
 {
@@ -610,7 +547,7 @@ void so3ToVec(double so3Mat[3][3], double omg[3])
 *@param[out]	theta		rotation angle.
 *@return		No return value.
 *@note:
-*@waring:
+*@warning:
 */
 void AxisAng3(double expc3[3],double omghat[3],double *theta)
 {
@@ -639,7 +576,7 @@ void AxisAng3(double expc3[3],double omghat[3],double *theta)
 *@param[out]	R			rotation matrix R in SO(3).
 *@return		No return value.
 *@note:
-*@waring:
+*@warning:
 */
 void MatrixExp3(double so3Mat[3][3],double R[3][3])
 {
@@ -687,25 +624,25 @@ void MatrixExp3(double so3Mat[3][3],double R[3][3])
 *@param[out]	so3Mat	matrix logarithm.
 *@return		No return value.
 *@note:
-*@waring:
+*@warning:
 */
 void MatrixLog3(double R[3][3],double so3Mat[3][3])
 {
 	double omg[3] = { 0 };
-	double acosinput = (R[0][0] + R[1][1] + R[2][2] - 1.0) / 2;
-	if (acosinput > 1.0)
+	double acosinput = (R[0][0] + R[1][1] + R[2][2] - 1.0) / 2.0;
+	if (fabs(acosinput - 1.0)<ZERO_VALUE)
 	{
 		memset(so3Mat, 0, 9 * sizeof(double));
 	}
 	else if (acosinput<=-1.0)
 	{
-		if ((1.0+R[2][2])>= ZERO_ELEMENT)
+		if ((1.0+R[2][2])>= ZERO_VALUE)
 		{
 			omg[0] = 1.0 / sqrt(2 * (1.0 + R[2][2]))*R[0][2];
 			omg[1] = 1.0 / sqrt(2 * (1.0 + R[2][2]))*R[1][2];
 			omg[2] = 1.0 / sqrt(2 * (1.0 + R[2][2]))*(1.0 + R[2][2]);
 		}
-		else if ((1.0+R[1][1]>=ZERO_ELEMENT))
+		else if ((1.0+R[1][1]>= ZERO_VALUE))
 		{
 			omg[0] = 1.0 / sqrt(2 * (1.0 + R[1][1]))*R[0][1];
 			omg[1] = 1.0 / sqrt(2 * (1.0 + R[1][1]))*(1.0 + R[1][1]);
@@ -747,7 +684,7 @@ void MatrixLog3(double R[3][3],double so3Mat[3][3])
 *@param[out]	T		the homogeneous transformation matrix T.
 *@return		No return value.
 *@note:
-*@waring:
+*@warning:
 */
 void RpToTrans(double R[3][3], double p[3], double T[4][4])
 {
@@ -803,7 +740,7 @@ void TransToRp(double T[4][4], double R[3][3], double p[3])
 *@param[out]	InvT	the inverse of T.
 *@return		No return value.
 *@note:
-*@waring:
+*@warning:
 */
 void TransInv(double T[4][4],double InvT[4][4])
 {
@@ -825,7 +762,7 @@ void TransInv(double T[4][4],double InvT[4][4])
 *@param[out]	se3Mat	the se(3) matrix.
 *@return		No return value.
 *@note:
-*@waring:
+*@warning:
 */
 void VecTose3(double V[6], double se3Mat[4][4])
 {
@@ -861,7 +798,7 @@ void VecTose3(double V[6], double se3Mat[4][4])
 *@param[out]	V				he 6-vector twist.
 *@return		No return value.
 *@note:
-*@waring:
+*@warning:
 */
 void se3ToVec(double se3Mat[4][4],double V[6])
 {
@@ -881,7 +818,7 @@ of the homogeneous transformation matrix T.
 *@param[out]	AdT		the 6 x 6 adjoint representation [AdT ].
 *@return		No return value.
 *@note:
-*@waring:
+*@warning:
 */
 void Adjoint(double T[4][4], double AdT[6][6])
 {
@@ -936,7 +873,7 @@ void Adjoint(double T[4][4], double AdT[6][6])
 *@param[in]		S		a normalized screw axis representation.
 *@return		No return value.
 *@note:
-*@waring:
+*@warning:
 */
 void ScrewToAxis(double q[3], double s[3], double h,double S[6])
 {
@@ -963,14 +900,14 @@ theta from the 6-vector of exponential coordinates S*theta.
 *@param[out]	theta		the distance traveled along the screw.
 *@return		No return value.
 *@note:
-*@waring:
+*@warning:
 */
 void AxisAng6(double expc6[6],double S[6],double *theta)
 {
-	*theta = Vec3Norm(expc6);
+	*theta = Vec3Norm2(expc6);
 	if (*theta<ZERO_ANGLE)
 	{
-		*theta = Vec3Norm(&expc6[3]);
+		*theta = Vec3Norm2(&expc6[3]);
 		if (*theta<ZERO_DISTANCE)
 		{
 			*theta=0.0;
@@ -991,7 +928,7 @@ void AxisAng6(double expc6[6],double S[6],double *theta)
 *@param[out]	T				the homogeneous transformation matrix T in SE(3).
 *@return		No return value.
 *@note:
-*@waring:
+*@warning:
 */
 void MatrixExp6(double se3Mat[4][4], double T[4][4])
 {
@@ -1014,7 +951,7 @@ void MatrixExp6(double se3Mat[4][4], double T[4][4])
 	};
 	TransToRp(se3Mat, so3mat, p);//extracts so3mat from se3mat
 	so3ToVec(so3mat, omgtheta);
-	if (Vec3Norm(omgtheta)<ZERO_ANGLE)
+	if (Vec3Norm2(omgtheta)<ZERO_ANGLE)
 	{
 		for (i=0;i<3;i++)
 		{
@@ -1072,7 +1009,7 @@ the homogeneous transformation matrix T in SE(3)
 *@param[out]	se3Mat		the matrix logarithm of T.
 *@return		No return value.
 *@note:
-*@waring:
+*@warning:
 */
 void MatrixLog6(double T[4][4], double se3Mat[4][4])
 {
@@ -1170,7 +1107,7 @@ void MatrixLog6(double T[4][4], double se3Mat[4][4])
 *@note:			when Slist is a matrix ,make sure that columns number of Slist is equal to JointNum,
 *				rows number of Slist 6 .The function call should be written as
 *				FKinBody(...,(double *)Slist,...).
-*@waring:
+*@warning:
 */
 void FKinSpace(double M[4][4],int  JointNum,double *Slist, double *thetalist,double T[4][4])
 {
@@ -1214,7 +1151,7 @@ void FKinSpace(double M[4][4],int  JointNum,double *Slist, double *thetalist,dou
 *@note:			when Blist is a matrix ,make sure that columns number of Slist is equal to JointNum,
 *				rows number of Slist 6 .The function call should be written as
 *				FKinBody(...,(double *)Blist,...).
-*@waring:
+*@warning:
 */
 void FKinBody(double M[4][4], int  JointNum, double *Blist, double thetalist[], double T[4][4])
 {
@@ -1257,7 +1194,7 @@ expressed in the body frame and a list of joint angles.
 *@note:			 when Blist and Jb are matrixes ,make sure that columns number of Slist or Jb is equal to JointNum,
 *				 rows number of Slist or Jb is 6 .The function call should be written as
 *				 JacobianSpace(JointNum,(double *)Slist,thetalist,(double *)Jb).
-*@waring:
+*@warning:
 */
 void JacobianBody(int JointNum,double *Blist, double *thetalist,double *Jb)
 {
@@ -1317,7 +1254,7 @@ void JacobianBody(int JointNum,double *Blist, double *thetalist,double *Jb)
 *@note:			 when Slist and Js are matrices ,make sure that columns number of Slist or Js is equal to JointNum,
 *				 rows number of Slist or Js is 6 .The function call should be written as 
 *				 JacobianSpace(JointNum,(double *)Slist,thetalist,(double *)Js).
-*@waring:
+*@warning:
 */
 void JacobianSpace(int JointNum, double *Slist, double *thetalist, double *Js)
 {
@@ -1374,7 +1311,7 @@ void JacobianSpace(int JointNum, double *Slist, double *thetalist, double *Js)
 *@param[in]		a
 *@param[in]		b
 *@note:
-*@waring:
+*@warning:
 */
 double pythag(const double a, const double b)
 {
@@ -1451,7 +1388,7 @@ void reorder(double *u,int m,int n,double *w,double *v)
 *@param[out]	v		output matrix v.	
 *@return        No return value.
 *@note:			input a must be a  m rows and n columns matrix,w is n-vector,v is a n rows and n columns matrix.
-*@waring:
+*@warning:
 */
 int svdcmp(double *a, int m, int n, double tol, double *w, double *v)
 {
@@ -1743,7 +1680,7 @@ int svdcmp(double *a, int m, int n, double tol, double *w, double *v)
 *@retval		0			success.
 *@retval		1			failure when use malloc to allocate memory.
 *@note:		
-*@waring:
+*@warning:
 */
 int MatrixPinv(const double *a, int m, int n, double tol, double *b)
 {
@@ -1836,7 +1773,7 @@ int MatrixPinv(const double *a, int m, int n, double tol, double *b)
 *@retval		1				The maximum number of iterations reach before the algorithm is terminated.
 *@retval		2				failure to allocate memory for Jacobian matrix.
 *@note:
-*@waring:
+*@warning:
 */
 int IKinBodyNR(int JointNum, double *Blist, double M[4][4], double T[4][4], double *thetalist0, double eomg, double ev, int maxiter, double *thetalist)
 {
@@ -1941,7 +1878,7 @@ int IKinBodyNR(int JointNum, double *Blist, double M[4][4], double T[4][4], doub
 *@return		0:success,Nonzero:failure
 *@retval		0
 *@note :
-*@warning :
+*@warning:
 */
 int IKinSpaceNR(int JointNum, double *Slist, double M[4][4], double T[4][4], double *thetalist0, double eomg, double ev, int maxiter,double *thetalist)
 {
@@ -2030,3 +1967,366 @@ int IKinSpaceNR(int JointNum, double *Slist, double M[4][4], double T[4][4], dou
 	free(dtheta);
 	return ErrFlag;
 }
+
+
+
+/**
+* @brief 			Description: Algorithm for Computing the ZYX Euler Angles according to rotation matrix.
+* @param[in]		R				Rotation matrix.
+* @param[out]		alpha			Angles for rotation around Z axis.
+* @param[out]		beta			Angles for rotation around Y axis.
+* @param[out]		gamma			Angles for rotation around X axis.
+* @return			No return value.
+* @note:
+*@warning:
+*/
+void RotToZYXEulerAngle(double R[3][3], double *alpha, double *beta, double *gamma)
+{
+
+	if (fabs(1.0 + R[2][0])<ZERO_ELEMENT)
+	{
+		*alpha = 0;
+		*beta = PI / 2.0;
+		*gamma = atan2(R[0][1], R[1][1]);
+
+	}
+	else if (fabs(1.0 - R[2][0])<ZERO_ELEMENT)
+	{
+		*alpha = 0;
+		*beta = -PI / 2.0;
+		*gamma = atan2(R[0][1], R[1][1]);
+	}
+	else
+	{
+
+		*alpha = atan2(R[1][0], R[0][0]);
+		*beta = atan2(-R[2][0], sqrt(R[0][0] * R[0][0] + R[1][0] * R[1][0]));
+		*gamma = atan2(R[2][1], R[2][2]);
+	}
+	return;
+
+}
+
+/**
+* @brief 			Description: Algorithm for Computing the rotation matrix of ZYX Euler Angles.
+* @param[in]		alpha			Angles for rotation around Z axis.
+* @param[in]		beta			Angles for rotation around Y axis.
+* @param[in]		gamma			Angles for rotation around X axis.
+* @param[out]		R				Rotation matrix.
+* @return			No return value.
+* @note:
+* @waring:
+*/
+void ZYXEulerAngleToRot(double alpha, double beta, double gamma, double R[3][3])
+{
+	R[0][0] = cos(alpha)*cos(beta);
+	R[0][1] = cos(alpha)*sin(beta)*sin(gamma) - sin(alpha)*cos(gamma);
+	R[0][2] = cos(alpha)*sin(beta)*cos(gamma) + sin(alpha)*sin(gamma);
+	R[1][0] = sin(alpha)*cos(beta);
+	R[1][1] = sin(alpha)*sin(beta)*sin(gamma) + cos(alpha)*cos(gamma);
+	R[1][2] = sin(alpha)*sin(beta)*cos(gamma) - cos(alpha)*sin(gamma);
+	R[2][0] = -sin(beta);
+	R[2][1] = cos(beta)*sin(gamma);
+	R[2][2] = cos(beta)*cos(gamma);
+	return;
+}
+
+
+/**
+ * @brief 			Description: Computes the unit vector of Euler axis and rotation angle corresponding to rotation matrix.
+ * @param[in]		R				A rotation matrix.
+ * @param[out]		omghat			the unit vector of Euler axis .
+ * @param[out]		theta			the rotation angle.
+ * @return			No return value.
+ * @retval			0
+ * @note:			if  theta is zero ,the unit axis is undefined and set it as a zero vector [0;0;0].
+ *@warning:
+*/
+void RotToAxisAng(double R[3][3],double omghat[3],double *theta)
+{
+	double tmp;
+	double omg[3] = { 0 };
+	double acosinput = (R[0][0] + R[1][1] + R[2][2] - 1.0) / 2.0;
+	if (fabs(acosinput-1.0)<ZERO_VALUE)
+	{
+		memset(omghat, 0, 3 * sizeof(double));
+		*theta = 0.0;
+	}
+	else if (acosinput <= -1.0)
+	{
+		if ((1.0 + R[2][2]) >= ZERO_VALUE)
+		{
+			omg[0] = 1.0 / sqrt(2 * (1.0 + R[2][2]))*R[0][2];
+			omg[1] = 1.0 / sqrt(2 * (1.0 + R[2][2]))*R[1][2];
+			omg[2] = 1.0 / sqrt(2 * (1.0 + R[2][2]))*(1.0 + R[2][2]);
+		}
+		else if ((1.0 + R[1][1] >= ZERO_VALUE))
+		{
+			omg[0] = 1.0 / sqrt(2 * (1.0 + R[1][1]))*R[0][1];
+			omg[1] = 1.0 / sqrt(2 * (1.0 + R[1][1]))*(1.0 + R[1][1]);
+			omg[2] = 1.0 / sqrt(2 * (1.0 + R[1][1]))*R[2][1];
+		}
+		else
+		{
+			omg[0] = 1.0 / sqrt(2 * (1.0 + R[0][0]))*(1.0 + R[0][0]);
+			omg[1] = 1.0 / sqrt(2 * (1.0 + R[0][0]))*R[1][0];
+			omg[2] = 1.0 / sqrt(2 * (1.0 + R[0][0]))*R[2][0];
+		}
+		omghat[0] = omg[0];
+		omghat[1] = omg[1];
+		omghat[2] = omg[2];
+		*theta=PI;
+	}
+	else
+	{
+		*theta = acos(acosinput);
+		tmp = 2.0*sin(*theta);
+		omghat[0] = (R[2][1] - R[1][2]) / tmp;
+		omghat[1] = (R[0][2] - R[2][0]) / tmp;
+		omghat[2] = (R[1][0] - R[0][1]) / tmp;
+
+	}
+
+	return;
+}
+
+
+/**
+ * @brief 			Description: Computes the unit quaternion corresponding to the Euler axis and rotation angle.
+ * @param[in]		omg				Unit vector of Euler axis.
+ * @param[in]		theta			Rotation angle.
+ * @param[in]		q				The unit quaternion
+ * @return			No return value.
+ * @note:
+ *@warning:
+*/
+void AxisAngToQuaternion(double omg[3],double theta, double q[4])
+{
+	q[0] = cos(theta / 2.0);
+	q[1] = omg[0] * sin(theta / 2.0);
+	q[2] = omg[1] * sin(theta / 2.0);
+	q[3] = omg[2] * sin(theta / 2.0);
+	return;
+}
+
+
+/**
+ * @brief 			Description:Computes the unit quaternion corresponding to a rotation matrix.
+ * @param[in]		q				Unit quaternion.
+ * @param[out]		R				Rotation matrix.
+ * @return			No return value.
+ * @note:
+ * @warning:
+*/
+void QuaternionToRot(double q[4], double R[3][3])
+{
+	R[0][0] = q[0] * q[0] - q[1] * q[1] - q[2] * q[2] - q[3] * q[3];
+	R[0][1] = 2.0*(q[1] * q[2] - q[0] * q[3]);
+	R[0][2] = 2.0*(q[0] * q[2] + q[1] * q[3]);
+	R[1][0] = 2.0*(q[0] * q[3] + q[1] * q[2]);
+	R[1][1] = q[0] * q[0] - q[1] * q[1] + q[2] * q[2] - q[3] * q[3];
+	R[1][2] = 2.0*(q[2] * q[3] - q[0] * q[1]);
+	R[2][0] = 2.0*(q[1] * q[3] - q[0] * q[2]);
+	R[2][1] = 2.0*(q[0] * q[1] + q[2] * q[3]);
+	R[2][2] = q[0] * q[0] - q[1] * q[1] - q[2] * q[2] + q[3] * q[3];
+	return;
+}
+
+/**
+ * @brief 			Description: Computes the unit quaternion corresponding to the rotation matrix.
+ * @param[in]		R				The rotation matrix.
+ * @param[out]		q				The unit quaternion.
+ * @return			No return value.
+ * @note:
+ * @warning:
+*/
+void RotToQuaternion(double R[3][3], double q[4])
+{
+	double omghat[3];
+	double theta;
+	RotToAxisAng(R, omghat, &theta);
+	AxisAngToQuaternion(omghat, theta, q);
+	return;
+}
+
+
+/**
+ * @brief 			Description: Computes the parameters of  orientation interpolation between two orientations.
+ * @param[in]		Rs				Start orientation.
+ * @param[in]		Re				End orientation. 
+ * @param[in]		Param			structure of orientation interpolation parameters..
+ * @return			No return value.
+ * @note:
+ * @warning:
+*/
+void InitialOrientInpParam(double Rs[3][3],double Re[3][3], OrientInpParam *Param)
+{
+	double InvR[3][3];
+	MatrixCopy((double *)Rs, 3, 3, (double *)Param->Rs);
+	MatrixCopy((double *)Re, 3, 3, (double *)Param->Re);
+	RotInv(Rs, InvR);
+	MatrixMult((double *)InvR, 3, 3, (double *)Re, 3, (double *)Param->R);
+	RotToAxisAng(Param->R, Param->omg, &Param->theta);
+	MatrixCopy((double *)Param->R, 3, 3, (double *)Param->Ri);
+	Param->thetai = 0.0;
+	Param->InpFlag = 1;
+	return;
+}
+
+
+/**
+ * @brief 			Description: Computes orientations in each interpolation cycle.
+ * @param[in]		Param			Interpolation parameter structure.
+ * @param[out]		dtheta			angle  need to rotate from previous orientation to next orientation in next time step.
+ * @return			Ri1				orientations in next interpolation cycle.
+ * @retval			0
+ * @note:
+ * @warning:
+*/
+void QuaternionOrientInp(OrientInpParam *Param, double dtheta, double Ri1[3][3])
+{
+	double q[4];
+	double R[3][3];
+	Param->InpFlag = 2;
+	Param->thetai = Param->thetai + dtheta;
+	if (Param->thetai >= Param->theta)
+	{
+		Param->thetai = Param->theta;
+		Param->InpFlag = 3;
+	}
+	AxisAngToQuaternion(Param->omg, Param->thetai, q);
+	QuaternionToRot(q, R);
+	MatrixMult((double *)Param->Rs, 3, 3, (double *)R, 3, (double *)Ri1);
+	MatrixCopy((double *)Ri1, 3, 3, (double *)Param->Ri);
+	return;
+}
+
+/**
+ * @brief 			Description:Computes the parameters of line path for interpolation.
+ * @param[in]		p1				Coordinates of start point.
+ * @param[in]		p2				Coordinates of end point.
+ * @param[out]		p				Line path parameters structure.
+ * @return			No return value.
+ * @note:
+ * @warning:
+*/
+void InitialLinePathParam(double p1[3],double p2[3], LineInpParam *p)
+{
+	int i;
+	for (i=0;i<3;i++)
+	{
+		p->p1[i] = p1[i];
+		p->p2[i] = p2[i];
+		p->pi[i] = p1[i];
+	}
+	p->L = sqrt((p2[0] - p1[0])*(p2[0] - p1[0]) + (p2[1] - p1[1])*(p2[1] - p1[1]) + (p2[2] - p1[2])*(p2[2] - p1[2]));
+
+	if (p->L<ZERO_DISTANCE)
+	{
+		p->t[0] = 0.0;
+		p->t[1] = 0.0;
+		p->t[2] = 0.0;
+	}
+	else
+	{ 
+		p->t[0] = (p2[0] - p1[0]) / p->L;
+		p->t[1] = (p2[1] - p1[1]) / p->L;
+		p->t[2] = (p2[2] - p1[2]) / p->L;
+	}
+	p->InpFlag = 1;
+	p->Li = 0;
+	return;
+}
+
+/**
+ * @brief 			Description:Computes the line path interpolation coordinates in each interpolation cycle.
+ * @param[in]		p				Line path parameters structure.
+ * @param[in]		dL				step length in next interpolation cycle. 
+ * @param[in]		pi1				coordinates in next interpolation cycle.
+ * @return			No return value.
+ * @note:
+ * @warning:
+*/
+void LinePathInp(LineInpParam *p, double dL, double pi1[3])
+{
+	p->InpFlag = 2;
+	if (p->Li + dL>=p->L)
+	{
+		pi1[0] = p->p2[0];
+		pi1[1] = p->p2[1];
+		pi1[2] = p->p2[2];
+		p->Li = p->L;
+		p->InpFlag = 3;
+	}
+	else if ( p->L- p->Li < 2.0*dL)
+	{
+		//avoid distance of  final step  is too small.
+		dL = 0.5*dL;
+		pi1[0] = p->pi[0] + p->t[0] * dL;
+		pi1[1] = p->pi[1] + p->t[1] * dL;
+		pi1[2] = p->pi[2] + p->t[2] * dL;
+		p->Li = p->Li+dL;
+	}
+	else
+	{
+		pi1[0] = p->pi[0] + p->t[0] * dL;
+		pi1[1] = p->pi[1] + p->t[1] * dL;
+		pi1[2] = p->pi[2] + p->t[2] * dL;
+		p->Li = p->Li + dL;
+	}
+
+	p->pi[0] = pi1[0];
+	p->pi[1] = pi1[1];
+	p->pi[2] = pi1[2];
+	return;
+}
+
+/**
+ * @brief 			Description: Computes the parameters of both line path and orientation for interpolation.
+ * @param[in]		p1				Start coordinates,including x,y,z coordinates and orientation angles roll-pitch-yaw angles.
+ * @param[in]		p2				End coordinates,including x,y,z coordinates and orientation angles roll-pitch-yaw angles.
+ * @param[out]		LPO				Parameters of both line path and orientation for interpolation.
+ * @return			No return value.
+ * @note:
+ * @warning:
+*/
+void InitialLinePOInpParam( double p1[6], double p2[6], LinePOParam *LPO)
+{
+	double Rs[3][3];
+	double Re[3][3];
+	RPYToRot(p1[3], p1[4], p1[5], Rs);
+	RPYToRot(p2[3], p2[4], p2[5], Re);
+	InitialLinePathParam( p1, p2, &(LPO->Line));
+	InitialOrientInpParam(Rs, Re, &(LPO->Orient));
+	RpToTrans(Rs, p1, LPO->Ts);
+	RpToTrans(Rs, p1, LPO->Ti);
+	RpToTrans(Re, p2, LPO->Te);
+	LPO->InpFlag = 1;
+	return;
+}
+
+/**
+ * @brief 			Description:Computes the line path interpolation coordinates and orientation in each interpolation cycle.
+ * @param[out]		LPO				Line path and orientation parameters structure.
+ * @param[in]		dL				Line path interpolation step length.
+ * @param[out]		dtheta			angle interpolation step length for Orientation interpolation.
+ * @return			No return value.
+ * @note:
+ * @warning:
+*/
+void LinePOInp(LinePOParam *LPO,double dL,double dtheta,double Ti[4][4])
+{
+	double pi[3];
+	double Ri[3][3];
+	LPO->InpFlag = 2;
+	LinePathInp(&LPO->Line, dL, pi);
+	QuaternionOrientInp(&LPO->Orient, dtheta, Ri);
+	if (LPO->Line.InpFlag==3 && LPO->Orient.InpFlag==3)
+	{
+		LPO->InpFlag = 3;
+	}
+	RpToTrans(Ri, pi, Ti);
+	MatrixCopy((double *)Ti, 4, 4, (double *)LPO->Ti);
+	return;
+}
+

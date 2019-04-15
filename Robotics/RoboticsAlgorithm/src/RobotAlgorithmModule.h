@@ -22,6 +22,7 @@ extern "C" {
 	#define			ZERO_ELEMENT		1.0E-6		
 	#define			ZERO_ANGLE			1.0E-6
 	#define			ZERO_DISTANCE		1.0E-6
+	#define			ZERO_VALUE			1.0E-6
 
 	/**
 	*@brief			Description:use GrublersFormula calculate The number of degrees of
@@ -39,55 +40,6 @@ extern "C" {
 	*/
 	int GrublersFormula(int m, int N,  int J, int *f);
 
-	/**
-	* @brief 			Description: Algorithm for Computing the ZYX Euler Angles according to rotation matrix.
-	* @param[in]		R				Rotation matrix.
-	* @param[out]		alpha			Angles for rotation around Z axis.
-	* @param[out]		beta			Angles for rotation around Y axis.
-	* @param[out]		gamma			Angles for rotation around X axis.
-	* @return			No return value.
-	* @note:
-	* @waring:
-	*/
-	void RotToZYXEulerAngle(double R[3][3], double *alpha, double *beta, double *gamma);
-
-
-	/**
-	* @brief 			Description: Algorithm for Computing the rotation matrix of ZYX Euler Angles.
-	* @param[in]		alpha			Angles for rotation around Z axis.
-	* @param[in]		beta			Angles for rotation around Y axis.
-	* @param[in]		gamma			Angles for rotation around X axis.
-	* @param[out]		R				Rotation matrix.
-	* @return			No return value.
-	* @note:
-	* @waring:
-	*/
-	void ZYXEulerAngleToRot(double alpha, double beta, double gamma, double R[3][3]);
-
-
-	/**
-	* @brief 			Description: Algorithm for Computing the roll-pitch-yaw angles(rotate around fix reference X,Y,Z axis).
-	* @param[in]		R				Rotation matrix.
-	* @param[out]		roll			Angles for rotate around fix reference X axis.
-	* @param[out]		pitch			Angles for rotate around fix reference Y axis.
-	* @param[out]		yaw				Angles for rotate around fix reference Z axis.
-	* @return			No return value.
-	* @note:
-	* @waring:
-	*/
-	void RotToRPY(double R[3][3], double *roll, double *pitch, double *yaw);
-
-	/**
-	* @brief 			Description: Algorithm for Computing the rotation matrix of the roll-pitch-yaw angles.
-	* @param[in]		roll			Angles for rotate around fix reference X axis.
-	* @param[in]		pitch			Angles for rotate around fix reference Y axis.
-	* @param[in]		yaw				Angles for rotate around fix reference Z axis.
-	* @param[out]		R				Rotation matrix.
-	* @return			No return value.
-	* @note:
-	* @waring:
-	*/
-	void RPYToRot(double roll, double pitch, double yaw, double R[3][3]);
 
 	/**
 	*@brief			Computes the inverse of the rotation matrix R.
@@ -414,6 +366,241 @@ extern "C" {
 	*@waring:
 	*/
 	int IKinSpaceNR(int JointNum, double *Slist, double M[4][4], double T[4][4], double *thetalist0, double eomg, double ev, int maxiter, double *thetalist);
+
+
+	/**
+	* @brief 			Description: Algorithm for Computing the roll-pitch-yaw angles(rotate around fix reference X,Y,Z axis).
+	* @param[in]		R				Rotation matrix.
+	* @param[out]		roll			Angles for rotate around fix reference X axis.
+	* @param[out]		pitch			Angles for rotate around fix reference Y axis.
+	* @param[out]		yaw				Angles for rotate around fix reference Z axis.
+	* @return			No return value.
+	* @note:
+	*@warning:
+	*/
+	void RotToRPY(double R[3][3], double *roll, double *pitch, double *yaw);
+
+
+	/**
+	* @brief 			Description: Algorithm for Computing the rotation matrix of the roll-pitch-yaw angles.
+	* @param[in]		roll			Angles for rotate around fix reference X axis.
+	* @param[in]		pitch			Angles for rotate around fix reference Y axis.
+	* @param[in]		yaw				Angles for rotate around fix reference Z axis.
+	* @param[out]		R				Rotation matrix.
+	* @return			No return value.
+	* @note:
+	*@warning:
+	*/
+	void RPYToRot(double roll, double pitch, double yaw, double R[3][3]);
+
+
+	/**
+	* @brief 			Description: Algorithm for Computing the ZYX Euler Angles according to rotation matrix.
+	* @param[in]		R				Rotation matrix.
+	* @param[out]		alpha			Angles for rotation around Z axis.
+	* @param[out]		beta			Angles for rotation around Y axis.
+	* @param[out]		gamma			Angles for rotation around X axis.
+	* @return			No return value.
+	* @note:
+	* @waring:
+	*/
+	void RotToZYXEulerAngle(double R[3][3], double *alpha, double *beta, double *gamma);
+
+
+	/**
+	* @brief 			Description: Algorithm for Computing the rotation matrix of ZYX Euler Angles.
+	* @param[in]		alpha			Angles for rotation around Z axis.
+	* @param[in]		beta			Angles for rotation around Y axis.
+	* @param[in]		gamma			Angles for rotation around X axis.
+	* @param[out]		R				Rotation matrix.
+	* @return			No return value.
+	* @note:
+	* @waring:
+	*/
+	void ZYXEulerAngleToRot(double alpha, double beta, double gamma, double R[3][3]);
+
+
+	/**
+	* @brief 			Description: Computes the unit vector of Euler axis and rotation angle corresponding to rotation matrix.
+	* @param[in]		R				A rotation matrix.
+	* @param[out]		omghat			the unit vector of Euler axis .
+	* @param[out]		theta			the rotation angle.
+	* @return			No return value.
+	* @retval			0
+	* @note:			if  theta is zero ,the unit axis is undefined and set it as a zero vector [0;0;0].
+	* @waring:
+	*/
+	void RotToAxisAng(double R[3][3], double omghat[3], double *theta);
+
+
+	/**
+	* @brief 			Description: Computes the unit quaternion corresponding to the Euler axis and rotation angle.
+	* @param[in]		omg				Unit vector of Euler axis.
+	* @param[in]		theta			Rotation angle.
+	* @param[in]		q				The unit quaternion
+	* @return			No return value.
+	* @note:
+	* @warning:
+	*/
+	void AxisAngToQuaternion(double omg[3], double theta, double q[4]);
+
+
+	/**
+	* @brief 			Description:Computes the unit quaternion corresponding to a rotation matrix.
+	* @param[in]		q				Unit quaternion.
+	* @param[out]		R				Rotation matrix.
+	* @return			No return value.
+	* @note:
+	* @warning:
+	*/
+	void QuaternionToRot(double q[4], double R[3][3]);
+
+
+	/**
+	* @brief 			Description: Computes the unit quaternion corresponding to the rotation matrix.
+	* @param[in]		R				The rotation matrix.
+	* @param[out]		q				The unit quaternion.
+	* @return			No return value.
+	* @note:
+	* @warning:
+	*/
+	void RotToQuaternion(double R[3][3], double q[4]);
+
+
+	/**
+	* @brief 			Description: structure of LinePath interpolation parameters.
+	*/
+	typedef struct
+	{
+		double p1[3];
+		double p2[3];
+		double L;
+		double t[3];
+		double pi[3];
+		double Li;
+		int InpFlag;
+	}LineInpParam;
+
+
+	/**
+	* @brief 			Description: structure of arc interpolation parameters.
+	*/
+	typedef struct  
+	{
+		double p1[3];
+		double p2[3];
+		double p3[3];
+		double N[3];
+		double C[3];
+		double theta;
+		double R;
+	}ArcInpParam;
+
+
+	/**
+	* @brief 			Description: structure of orientation interpolation parameters.
+	*/
+	typedef struct
+	{
+		double Rs[3][3];//Start orientation Rotation matrix. 
+		double Re[3][3];//End orientation Rotation matrix.
+		double R[3][3];	//Matrix rotation from Start orientation to End orientation.
+		double omg[3];  //unit vector of Euler axis.
+		double theta;	//Total interpolation angle.
+		double Ri[3][3];//Current orientation rotation Matrix.
+		double thetai;  //Current angle.
+		int InpFlag;	//1:finish initial ,2;interpolating ,3;finish interpolation
+	}OrientInpParam;
+
+
+	/**
+	* @brief 			Description: structure of line Path and Orientation (PO) interpolation parameters.
+	*/
+	typedef struct  
+	{
+		LineInpParam Line;
+		OrientInpParam Orient;
+		double Ts[4][4];
+		double Te[4][4];
+		double Ti[4][4];
+		int InpFlag;
+	}LinePOParam;
+
+
+	/**
+	* @brief 			Description:Computes the parameters of  interpolation between two orientations.
+	* @param[in]		Rs				Start posture Rotation matrix.
+	* @param[in]		Re				End posture Rotation matrix.
+	* @param[in]		Param			structure of orientation interpolation parameters..
+	* @return			No return value.
+	* @note:
+	* @warning:
+	*/
+	void InitialOrientInpParam(double Rs[3][3], double Re[3][3], OrientInpParam *Param);
+
+
+	/**
+	* @brief 			Description: Computes orientations interpolation.
+	* @param[in]		Param			Interpolation parameter structure.
+	* @param[out]		dtheta			angle  need to rotate from previous orientation to next orientation in next time step.
+	* @return			Ri1				orientations in next time step.
+	* @retval			0
+	* @note:
+	* @warning:
+	*/
+	void QuaternionOrientInp(OrientInpParam *Param, double dtheta, double Ri1[3][3]);
+
+
+	/**
+	* @brief 			Description:Computes the parameters of line path for interpolation.
+	* @param[in]		p1				Coordinates of start point.
+	* @param[in]		p2				Coordinates of end point.
+	* @param[out]		p				Line path parameters structure.
+	* @return			No return value.
+	* @note:
+	* @warning:
+	*/
+	void InitialLinePathParam(double p1[3], double p2[3], LineInpParam *p);
+
+
+	/**
+	* @brief 			Description:Computes the line path interpolation coordinates in each interpolation cycle.
+	* @param[in]		p				Line path parameters structure.
+	* @param[in]		dL				step length in next interpolation cycle.
+	* @param[in]		pi1				coordinates in next interpolation cycle.
+	* @return			No return value.
+	* @note:
+	* @warning:
+	*/
+	void LinePathInp(LineInpParam *p, double dL, double pi1[3]);
+
+	/**
+	* @brief 			Description: Computes the parameters of both line path and orientation for interpolation.
+	* @param[in]		p1				Start coordinates,including x,y,z coordinates and orientation angles roll-pitch-yaw angles.
+	* @param[in]		p2				End coordinates,including x,y,z coordinates and orientation angles roll-pitch-yaw angles.
+	* @param[out]		LPO				Parameters of both line path and orientation for interpolation.
+	* @return			No return value.
+	* @note:
+	* @warning:
+	*/
+	void InitialLinePOInpParam(double p1[6], double p2[6], LinePOParam *LPO);
+
+
+	/**
+	* @brief 			Description:Computes the line path interpolation coordinates and orientation in each interpolation cycle.
+	* @param[out]		LPO				Line path and orientation parameters structure.
+	* @param[in]		dL				Line path interpolation step length.
+	* @param[out]		dtheta			angle interpolation step length for Orientation interpolation.
+	* @return			No return value.
+	* @note:
+	* @warning:
+	*/
+	void LinePOInp(LinePOParam *LPO, double dL, double dtheta, double Ti[4][4]);
+
+
+
+
+
 
 #ifdef __cplusplus
 }

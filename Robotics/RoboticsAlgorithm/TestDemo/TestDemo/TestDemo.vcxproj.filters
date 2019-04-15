@@ -21,9 +21,15 @@
     <ClCompile Include="..\..\src\TestDemo.c">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\TestMain.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\RobotAlgorithmModule.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TestDemo.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
