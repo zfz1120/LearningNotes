@@ -2118,20 +2118,42 @@ void AxisAngToQuaternion(double omg[3],double theta, double q[4])
  * @note:
  * @warning:
 */
+// void QuaternionToRot(double q[4], double R[3][3])
+// {
+// 	R[0][0] = q[0] * q[0] - q[1] * q[1] - q[2] * q[2] - q[3] * q[3];
+// 	R[0][1] = 2.0*(q[1] * q[2] - q[0] * q[3]);
+// 	R[0][2] = 2.0*(q[0] * q[2] + q[1] * q[3]);
+// 	R[1][0] = 2.0*(q[0] * q[3] + q[1] * q[2]);
+// 	R[1][1] = q[0] * q[0] - q[1] * q[1] + q[2] * q[2] - q[3] * q[3];
+// 	R[1][2] = 2.0*(q[2] * q[3] - q[0] * q[1]);
+// 	R[2][0] = 2.0*(q[1] * q[3] - q[0] * q[2]);
+// 	R[2][1] = 2.0*(q[0] * q[1] + q[2] * q[3]);
+// 	R[2][2] = q[0] * q[0] - q[1] * q[1] - q[2] * q[2] + q[3] * q[3];
+// 	return;
+// }
 void QuaternionToRot(double q[4], double R[3][3])
 {
-	R[0][0] = q[0] * q[0] - q[1] * q[1] - q[2] * q[2] - q[3] * q[3];
-	R[0][1] = 2.0*(q[1] * q[2] - q[0] * q[3]);
-	R[0][2] = 2.0*(q[0] * q[2] + q[1] * q[3]);
-	R[1][0] = 2.0*(q[0] * q[3] + q[1] * q[2]);
-	R[1][1] = q[0] * q[0] - q[1] * q[1] + q[2] * q[2] - q[3] * q[3];
-	R[1][2] = 2.0*(q[2] * q[3] - q[0] * q[1]);
-	R[2][0] = 2.0*(q[1] * q[3] - q[0] * q[2]);
-	R[2][1] = 2.0*(q[0] * q[1] + q[2] * q[3]);
-	R[2][2] = q[0] * q[0] - q[1] * q[1] - q[2] * q[2] + q[3] * q[3];
-	return;
-}
+    double qw;
+    double qx;
+    double qy;
+    double qz;
+    double n;
 
+    //求解单位四元数
+    qw = q[0];
+    qx = q[1];
+    qy = q[2];
+    qz = q[3];
+    n = 1.0f / sqrt(qx*qx+qy*qy+qz*qz+qw*qw);
+    qw *= n;
+    qx *= n;
+    qy *= n;
+    qz *= n;
+
+    R[0][0]  = 1.0f - 2.0f*qy*qy - 2.0f*qz*qz;  R[0][1]  = 2.0f*qx*qy - 2.0f*qz*qw;         R[0][2]  = 2.0f*qx*qz + 2.0f*qy*qw;
+    R[1][0]  = 2.0f*qx*qy + 2.0f*qz*qw;         R[1][1]  = 1.0f - 2.0f*qx*qx - 2.0f*qz*qz;  R[1][2]  = 2.0f*qy*qz - 2.0f*qx*qw;
+    R[2][0]  = 2.0f*qx*qz - 2.0f*qy*qw;         R[2][1] = 2.0f*qy*qz + 2.0f*qx*qw;          R[2][2] = 1.0f - 2.0f*qx*qx - 2.0f*qy*qy;
+}
 /**
  * @brief 			Description: Computes the unit quaternion corresponding to the rotation matrix.
  * @param[in]		R				The rotation matrix.
